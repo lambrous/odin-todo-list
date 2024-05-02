@@ -1,24 +1,4 @@
-export const todoLists = [];
-
-export class TodoList {
-	constructor(name) {
-		this.name = name;
-		this.todos = [];
-		todoLists.push(this);
-	}
-
-	add(todo) {
-		this.todos.push(todo);
-	}
-
-	remove(todo) {
-		const index = this.todos.indexOf(todo);
-		if (index < 0) return;
-		this.todos.splice(index, 1);
-	}
-}
-
-export class TodoItem {
+class TodoItem {
 	#priority;
 	static MIN_PRIORITY = 1;
 	static MAX_PRIORITY = 3;
@@ -56,3 +36,5 @@ export class TodoItem {
 		this.#priority = value;
 	}
 }
+
+export default TodoItem;
