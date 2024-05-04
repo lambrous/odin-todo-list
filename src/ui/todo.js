@@ -1,4 +1,4 @@
-import { elements } from "./elements";
+import { elements, renderList } from "./base";
 
 export function createTodoElement({ title }) {
 	const todoElement = document.createElement("li");
@@ -6,14 +6,4 @@ export function createTodoElement({ title }) {
 	return todoElement;
 }
 
-export function clearTodoList() {
-	elements.todoList.replaceChildren();
-}
-
-export function renderTodos(todos) {
-	clearTodoList();
-	for (const todo of todos) {
-		const todoElement = createTodoElement(todo);
-		elements.todoList.append(todoElement);
-	}
-}
+export const renderTodos = renderList(elements.todoList, createTodoElement);
