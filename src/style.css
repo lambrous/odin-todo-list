@@ -1,3 +1,7 @@
+:root {
+	--font-base: system-ui;
+}
+
 *,
 *::before,
 *::after {
@@ -7,6 +11,14 @@
 	font: inherit;
 }
 
-h1 {
-	color: red;
+body {
+	font-family: var(--font-base);
+	min-height: 100vh;
+
+	display: grid;
+	grid-template-columns: 300px 1fr;
+}
+
+#sidebar {
+	background-color: antiquewhite;
 }

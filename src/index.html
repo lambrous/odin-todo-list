@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
@@ -6,6 +6,24 @@
 		<title>Todo List | The Odin Project</title>
 	</head>
 	<body>
-		<h1>Hello</h1>
+		<nav id="sidebar">
+			<button>Inbox</button>
+			<ul>
+				<span>Projects</span>
+				<ul id="projects"></ul>
+				<form action="#" id="project-form">
+					<input type="text" name="name" placeholder="New Project" />
+					<button type="submit">Add Project</button>
+				</form>
+			</ul>
+		</nav>
+		<main id="content">
+			<h1 class="project-name">Inbox</h1>
+			<ul id="todos"></ul>
+			<form action="#" id="todo-form">
+				<input type="text" name="title" placeholder="New Todo" />
+				<button type="submit">Add Todo</button>
+			</form>
+		</main>
 	</body>
 </html>

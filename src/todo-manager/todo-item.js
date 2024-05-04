@@ -1,9 +1,9 @@
 class TodoItem {
 	#priority;
-	static MIN_PRIORITY = 1;
+	static MIN_PRIORITY = 0;
 	static MAX_PRIORITY = 3;
 
-	constructor(title, description, dueDate, priority) {
+	constructor({ title, description, dueDate, priority }) {
 		this.title = title;
 		this.description = description;
 		this.dueDate = dueDate;
