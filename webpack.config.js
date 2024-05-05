@@ -18,6 +18,7 @@ const config = {
 	devServer: {
 		open: true,
 		host: "localhost",
+		watchFiles: ["src/index.html"],
 	},
 	devtool: "inline-source-map",
 	plugins: [
