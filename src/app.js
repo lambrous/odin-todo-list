@@ -38,6 +38,7 @@ forms.project.addEventListener("submit", (e) => {
 	const newProject = todoManager.createProject(projectName);
 
 	e.target.reset();
+	e.target.querySelector("input").blur();
 	if (!newProject) return;
 
 	const projectsWithoutInbox = todoManager.projects.filter(
@@ -45,6 +46,7 @@ forms.project.addEventListener("submit", (e) => {
 	);
 
 	sidebarUI.renderProjects(projectsWithoutInbox, switchProject);
+	switchProject(newProject);
 });
 
 elements.inboxItem.addEventListener("click", () => {

@@ -36,8 +36,9 @@ class ProjectsManager {
 	}
 
 	createProject(name) {
-		if (!name.trim()) return null;
-		const project = new TodoList(name);
+		const trimmedName = name.trim();
+		if (!trimmedName) return null;
+		const project = new TodoList(trimmedName);
 		this.projects.push(project);
 		return project;
 	}

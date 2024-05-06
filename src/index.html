@@ -7,15 +7,22 @@
 	</head>
 	<body>
 		<nav id="sidebar">
-			<button class="inbox-button">Inbox</button>
+			<div class="logo">ODIN</div>
 			<ul>
-				<span>Projects</span>
-				<ul id="projects"></ul>
-				<form action="#" id="project-form">
-					<input type="text" name="name" placeholder="New Project" />
-					<button type="submit">Add Project</button>
-				</form>
+				<li class="nav-item">
+					<button class="inbox-button current">Inbox</button>
+				</li>
 			</ul>
+			<div class="projects">
+				<h4>My Projects</h4>
+				<ul id="projects-list"></ul>
+				<form action="#" id="project-form">
+					<div class="form-group">
+						<span class="icon hidden">#</span>
+						<input type="text" name="name" placeholder="Add Project" />
+					</div>
+				</form>
+			</div>
 		</nav>
 		<main id="content">
 			<h1 class="project-name">Inbox</h1>

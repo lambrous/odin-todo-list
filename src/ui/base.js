@@ -5,9 +5,10 @@ export const forms = {
 
 export const elements = {
 	todoList: document.querySelector("#todos"),
-	projectList: document.querySelector("#projects"),
+	projectList: document.querySelector("#projects-list"),
 	projectHeading: document.querySelector("h1.project-name"),
 	inboxItem: document.querySelector(".inbox-button"),
+	projectInput: forms.project.querySelector("input"),
 };
 
 export function renderList(container, createItem) {
@@ -19,3 +20,16 @@ export function renderList(container, createItem) {
 		}
 	};
 }
+
+function blurOnEscapePress(e) {
+	if (e.key === "Escape") e.target.blur();
+}
+
+elements.projectInput.addEventListener("blur", (e) => {
+	e.target.value = null;
+	document.removeEventListener("keydown", blurOnEscapePress);
+});
+
+elements.projectInput.addEventListener("focus", () => {
+	document.addEventListener("keydown", blurOnEscapePress);
+});
