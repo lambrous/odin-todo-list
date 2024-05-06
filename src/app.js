@@ -4,16 +4,19 @@ import todoManager from "./todo-manager/todo-list";
 import { forms, elements } from "./ui/base";
 import { todoUI, sidebarUI } from "./ui/ui";
 
-const inbox = todoManager.createProject("Inbox");
 const state = {
-	currentProject: inbox,
+	currentProject: null,
 };
+
+const inbox = todoManager.createProject("Inbox");
+elements.inboxItem.setAttribute("data-key", inbox.id);
 
 function switchProject(project) {
 	if (state.currentProject === project) return;
 	state.currentProject = project;
 	elements.projectHeading.textContent = state.currentProject.name;
 	todoUI.renderTodos(state.currentProject.todos);
+	sidebarUI.toggleActiveNavItem(state.currentProject.id);
 }
 
 forms.todo.addEventListener("submit", (e) => {
@@ -52,3 +55,5 @@ forms.project.addEventListener("submit", (e) => {
 elements.inboxItem.addEventListener("click", () => {
 	switchProject(inbox);
 });
+
+switchProject(inbox);

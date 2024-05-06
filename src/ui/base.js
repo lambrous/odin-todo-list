@@ -4,6 +4,7 @@ export const forms = {
 };
 
 export const elements = {
+	sidebar: document.querySelector("#sidebar"),
 	todoList: document.querySelector("#todos"),
 	projectList: document.querySelector("#projects-list"),
 	projectHeading: document.querySelector("h1.project-name"),

@@ -82,7 +82,7 @@ ul {
 		display: flex;
 		align-items: center;
 
-		&.current {
+		&.active {
 			background-color: color-mix(
 				in srgb,
 				var(--color-primary),
@@ -91,7 +91,7 @@ ul {
 			color: var(--color-text);
 		}
 
-		&:hover:not(.current) {
+		&:hover:not(.active) {
 			background-color: color-mix(
 				in srgb,
 				var(--color-primary),

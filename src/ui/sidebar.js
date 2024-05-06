@@ -12,6 +12,7 @@ export function createProjectElement(project, onClick) {
 	projectButton.addEventListener("click", () => {
 		onClick(project);
 	});
+	projectButton.setAttribute("data-key", project.id);
 	projectButton.append(icon, project.name);
 
 	projectElement.replaceChildren(projectButton);
@@ -22,3 +23,11 @@ export const renderProjects = renderList(
 	elements.projectList,
 	createProjectElement,
 );
+
+export function toggleActiveNavItem(itemID) {
+	const navButtons = elements.sidebar.querySelectorAll(".nav-item button");
+	for (const button of navButtons) {
+		const { key } = button.dataset;
+		button.classList.toggle("active", key === itemID);
+	}
+}
