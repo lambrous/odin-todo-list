@@ -1,49 +1,52 @@
-function removeFromArray(array) {
-	return (item) => {
-		const index = array.indexOf(item);
-		if (index === -1) return;
-		array.splice(index, 1);
-	};
-}
+import { nanoid } from "nanoid";
 
 class TodoList {
-	#todos = [];
+	#todos = new Map();
+	#id = nanoid(5);
 
 	constructor(name) {
 		this.name = name;
 	}
 
 	get todos() {
-		return this.#todos;
+		return Array.from(this.#todos.values());
+	}
+
+	get id() {
+		return this.#id;
 	}
 
 	addTodo(todo) {
-		this.todos.push(todo);
+		this.#todos.set(todo.id, todo);
 	}
 
-	removeTodo = removeFromArray(this.todos);
+	removeTodo(id) {
+		this.#todos.delete(id);
+	}
 }
 
 class ProjectsManager {
-	#projects = [];
+	#projects = new Map();
 
 	get projects() {
-		return this.#projects;
+		return Array.from(this.#projects.values());
 	}
 
 	get projectNames() {
-		return this.projects.map((list) => list.name);
+		return this.projects.map((project) => project.name);
 	}
 
 	createProject(name) {
 		const trimmedName = name.trim();
 		if (!trimmedName) return null;
 		const project = new TodoList(trimmedName);
-		this.projects.push(project);
+		this.#projects.set(project.id, project);
 		return project;
 	}
 
-	removeList = removeFromArray(this.projects);
+	removeProject(id) {
+		this.#projects.delete(id);
+	}
 }
 
 export default new ProjectsManager();

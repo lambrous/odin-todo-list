@@ -1,4 +1,7 @@
+import { nanoid } from "nanoid";
+
 class TodoItem {
+	#id = nanoid(7);
 	#priority;
 	static MIN_PRIORITY = 0;
 	static MAX_PRIORITY = 3;
@@ -9,6 +12,10 @@ class TodoItem {
 		this.dueDate = dueDate;
 		this.priority = priority;
 		this.isComplete = false;
+	}
+
+	get id() {
+		return this.#id;
 	}
 
 	markComplete() {
