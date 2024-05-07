@@ -1,9 +1,22 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+
 :root {
 	--color-text: #160811;
 	--color-background: #fff8f8;
 	--color-primary: #874b6d;
 	--color-secondary: #715764;
 	--color-accent: #80543c;
+
+	--color-text-02: color-mix(
+		in srgb,
+		var(--color-text),
+		var(--color-background) 30%
+	);
+	--color-text-03: color-mix(
+		in srgb,
+		var(--color-text),
+		var(--color-background) 40%
+	);
 
 	--font-base: "Inter", system-ui, sans-serif;
 }
@@ -26,6 +39,7 @@ body {
 	min-height: 100vh;
 	background-color: var(--color-background);
 	color: var(--color-text);
+	font-size: 0.875rem;
 	line-height: 1.5;
 
 	display: grid;
@@ -57,20 +71,40 @@ ul {
 	display: none;
 }
 
+.icon {
+	color: inherit;
+	font-size: 1.375rem;
+}
+
 #sidebar {
 	background-color: color-mix(
-		in oklab,
+		in srgb,
 		var(--color-secondary) 3%,
 		var(--color-background)
 	);
-	font-size: 0.875rem;
-	color: color-mix(in oklab, var(--color-text), var(--color-background) 10%);
+	color: color-mix(in srgb, var(--color-text), var(--color-background) 10%);
 	padding: 1rem;
 
 	.logo {
-		font-size: 1.5rem;
-		font-weight: 800;
+		font-size: 1.375rem;
+		font-weight: 600;
 		margin-bottom: 1rem;
+		letter-spacing: 0.05em;
+		display: flex;
+		align-items: center;
+		color: var(--color-primary);
+		user-select: none;
+
+		.icon {
+			font-size: 1.15em;
+			margin: 0;
+			transform: translateY(-2%);
+			font-weight: 800;
+		}
+	}
+
+	.icon {
+		margin-right: 0.5rem;
 	}
 
 	.nav-item button {
@@ -82,6 +116,12 @@ ul {
 		display: flex;
 		align-items: center;
 
+		.text {
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			overflow: hidden;
+		}
+
 		&.active {
 			background-color: color-mix(
 				in srgb,
@@ -89,6 +129,10 @@ ul {
 				transparent 75%
 			);
 			color: var(--color-text);
+		}
+
+		&.active .icon {
+			font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
 		}
 
 		&:hover:not(.active) {
@@ -99,10 +143,6 @@ ul {
 			);
 		}
 	}
-
-	.nav-item .icon {
-		margin-right: 0.5rem;
-	}
 }
 
 .projects {
@@ -111,20 +151,19 @@ ul {
 	h4 {
 		padding: 0.5rem 0.25rem;
 		font-weight: 600;
-		color: color-mix(in srgb, var(--color-text), var(--color-background) 30%);
+		color: var(--color-text-02);
 		font-size: 0.875rem;
 	}
 
 	.nav-item .icon {
-		font-size: 1.5em;
-		color: color-mix(in srgb, var(--color-text), var(--color-background) 30%);
-		font-weight: 200;
+		color: var(--color-text-03);
+		font-weight: 300;
 	}
 }
 
 #project-form {
 	input {
-		padding-block: 0.5rem;
+		padding-block: 0.25rem;
 		color: inherit;
 	}
 
@@ -132,14 +171,14 @@ ul {
 		margin-inline: auto;
 		cursor: pointer;
 		background-color: inherit;
+		color: var(--color-text-02);
 		border: 0;
 		text-align: center;
 		border: 1px solid;
-		border-color: var(--color-secondary);
+		border-color: color-mix(in srgb, var(--color-primary), transparent 60%);
 		border-radius: 0.25rem;
-		margin-top: 0.5rem;
 		width: 100%;
-		/* padding-block: 0.75rem; */
+		padding-block: 0.5rem;
 
 		&:hover {
 			background-color: color-mix(
@@ -147,6 +186,7 @@ ul {
 				var(--color-primary),
 				transparent 90%
 			);
+			color: var(--color-text);
 		}
 	}
 
@@ -158,7 +198,9 @@ ul {
 		outline: none;
 		background-color: transparent;
 		border: none;
-		border-bottom: 1px solid var(--color-primary);
+		border-bottom: 1px solid;
+		border-color: var(--color-text-03);
+		padding-bottom: 0.3125rem;
 	}
 
 	input:focus::placeholder {
@@ -166,9 +208,13 @@ ul {
 	}
 
 	.form-group {
-		padding-inline: 0.5rem;
 		display: flex;
 		align-content: center;
+		margin-top: 0.5rem;
+	}
+
+	.form-group:focus-within {
+		padding-inline: 0.5rem;
 	}
 
 	.form-group:focus-within .icon {
@@ -176,9 +222,8 @@ ul {
 	}
 
 	.icon {
-		font-size: 1.5em;
-		color: color-mix(in srgb, var(--color-text), var(--color-background) 30%);
-		font-weight: 200;
-		margin-right: 0.5rem;
+		color: var(--color-text-03);
+		font-weight: 300;
 	}
 }
+

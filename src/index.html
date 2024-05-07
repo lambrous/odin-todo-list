@@ -4,13 +4,23 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Todo List | The Odin Project</title>
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+		/>
 	</head>
 	<body>
 		<nav id="sidebar">
-			<div class="logo">ODIN</div>
+			<div class="logo">
+				<span class="material-symbols-outlined icon">task_alt</span>
+				<span>DIN</span>
+			</div>
 			<ul>
 				<li class="nav-item">
-					<button class="inbox-button">Inbox</button>
+					<button class="inbox-button">
+						<span class="material-symbols-outlined icon">inbox</span>
+						<span class="text">Inbox</span>
+					</button>
 				</li>
 			</ul>
 			<div class="projects">
@@ -18,7 +28,7 @@
 				<ul id="projects-list"></ul>
 				<form action="#" id="project-form">
 					<div class="form-group">
-						<span class="icon hidden">#</span>
+						<span class="material-symbols-outlined icon hidden">tag</span>
 						<input type="text" name="name" placeholder="Add Project" />
 					</div>
 				</form>
