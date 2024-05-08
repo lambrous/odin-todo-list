@@ -29,9 +29,11 @@ export const renderProjects = renderList(
 );
 
 export function toggleActiveNavItem(itemID) {
-	const navButtons = elements.sidebar.querySelectorAll(".nav-item button");
-	for (const button of navButtons) {
-		const { key } = button.dataset;
-		button.classList.toggle("active", key === itemID);
-	}
+	const activeNavItemButton = document.querySelector(".nav-item button.active");
+	activeNavItemButton?.classList.remove("active");
+
+	const selectedNavItemButton = document.querySelector(
+		`.nav-item button[data-key="${itemID}"]`,
+	);
+	selectedNavItemButton?.classList.add("active");
 }
