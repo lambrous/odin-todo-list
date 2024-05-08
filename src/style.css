@@ -68,7 +68,7 @@ ul {
 }
 
 .hidden {
-	display: none;
+	display: none !important;
 }
 
 .icon {
@@ -218,7 +218,7 @@ ul {
 	}
 
 	.form-group:focus-within .icon {
-		display: initial;
+		display: initial !important;
 	}
 
 	.icon {
@@ -227,3 +227,28 @@ ul {
 	}
 }
 
+#content {
+	padding-block: 4rem;
+
+	.container {
+		width: min(800px, calc(100% - 4rem));
+		margin-inline: auto;
+	}
+
+	.header {
+		margin-bottom: 2rem;
+	}
+
+	h1 {
+		font-size: 1.5rem;
+		font-weight: 600;
+	}
+
+	#add-todo-btn {
+		display: flex;
+		align-items: center;
+		font-size: 1rem;
+		line-height: normal;
+		gap: 0.5rem;
+	}
+}

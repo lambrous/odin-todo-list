@@ -26,7 +26,7 @@
 			<div class="projects">
 				<h4>My Projects</h4>
 				<ul id="projects-list"></ul>
-				<form action="#" id="project-form">
+				<form action="#" autocomplete="off" id="project-form">
 					<div class="form-group">
 						<span class="material-symbols-outlined icon hidden">tag</span>
 						<input type="text" name="name" placeholder="Add Project" />
@@ -35,12 +35,16 @@
 			</div>
 		</nav>
 		<main id="content">
-			<h1 class="project-name">Inbox</h1>
-			<ul id="todos"></ul>
-			<form action="#" id="todo-form">
-				<input type="text" name="title" placeholder="New Todo" />
-				<button type="submit">Add Todo</button>
-			</form>
+			<div class="container">
+				<div class="header">
+					<h1 class="project-name">Inbox</h1>
+				</div>
+				<ul id="todos"></ul>
+				<button id="add-todo-btn">
+					<span class="material-symbols-outlined icon"> add_box </span>
+					<span class="text">Add Todo</span>
+				</button>
+			</div>
 		</main>
 	</body>
 </html>

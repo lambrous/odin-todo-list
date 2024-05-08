@@ -1,8 +1,7 @@
 import "./style.css";
 import TodoItem from "./todo-manager/todo-item";
 import todoManager from "./todo-manager/todo-list";
-import { forms, elements } from "./ui/base";
-import { todoUI, sidebarUI } from "./ui/ui";
+import { forms, elements, todoUI, sidebarUI } from "./ui/ui";
 
 const state = {
 	currentProject: null,
@@ -19,29 +18,29 @@ function switchProject(project) {
 	sidebarUI.toggleActiveNavItem(state.currentProject.id);
 }
 
-forms.todo.addEventListener("submit", (e) => {
-	e.preventDefault();
+function handleTodoSubmit(event) {
+	event.preventDefault();
 
-	const todoFormData = new FormData(e.target);
+	const todoFormData = new FormData(event.target);
 	const todoData = Object.fromEntries(todoFormData);
 
 	const newTodo = new TodoItem(todoData);
 	state.currentProject.addTodo(newTodo);
-	console.log(state.currentProject.todos);
 
 	todoUI.renderTodos(state.currentProject.todos);
-	e.target.reset();
-});
+	todoUI.hideTodoForm();
+	event.target.reset();
+}
 
-forms.project.addEventListener("submit", (e) => {
-	e.preventDefault();
+function handleProjectSubmit(event) {
+	event.preventDefault();
 
-	const projectData = new FormData(e.target);
+	const projectData = new FormData(event.target);
 	const projectName = projectData.get("name");
 	const newProject = todoManager.createProject(projectName);
 
-	e.target.reset();
-	e.target.querySelector("input").blur();
+	event.target.reset();
+	event.target.querySelector("input").blur();
 	if (!newProject) return;
 
 	const projectsWithoutInbox = todoManager.projects.filter(
@@ -50,8 +49,10 @@ forms.project.addEventListener("submit", (e) => {
 
 	sidebarUI.renderProjects(projectsWithoutInbox, switchProject);
 	switchProject(newProject);
-});
+}
 
+forms.todo.addEventListener("submit", handleTodoSubmit);
+forms.project.addEventListener("submit", handleProjectSubmit);
 elements.inboxItem.addEventListener("click", () => {
 	switchProject(inbox);
 });
