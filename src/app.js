@@ -1,38 +1,42 @@
 import "./style.css";
 import TodoItem from "./todo-manager/todo-item";
 import todoManager from "./todo-manager/todo-list";
-import { forms, elements, todoUI, sidebarUI } from "./ui/ui";
+import { forms, elements, todoContent, sidebar } from "./ui/ui";
 
-const state = {
-	currentProject: null,
-};
+let currentProject = null;
 
 const inbox = todoManager.createProject("Inbox");
 elements.inboxItem.setAttribute("data-key", inbox.id);
 
 function switchProject(project) {
-	if (state.currentProject === project) return;
-	state.currentProject = project;
-	elements.projectHeading.textContent = state.currentProject.name;
-	todoUI.renderTodos(state.currentProject.todos);
-	sidebarUI.toggleActiveNavItem(state.currentProject.id);
+	if (currentProject === project) return;
+	currentProject = project;
+	elements.projectHeading.textContent = currentProject.name;
+	todoContent.renderTodos(currentProject.todos);
+	sidebar.toggleActiveNavItem(currentProject.id);
 }
 
-function handleTodoSubmit(event) {
+function addTodoHandler(event) {
 	event.preventDefault();
 
 	const todoFormData = new FormData(event.target);
 	const todoData = Object.fromEntries(todoFormData);
 
 	const newTodo = new TodoItem(todoData);
-	state.currentProject.addTodo(newTodo);
+	currentProject.addTodo(newTodo);
 
-	todoUI.renderTodos(state.currentProject.todos);
-	todoUI.hideTodoForm();
+	todoContent.renderTodos(currentProject.todos);
+	todoContent.hideTodoForm();
 	event.target.reset();
 }
 
-function handleProjectSubmit(event) {
+// todo:
+function editTodoHandler(event) {
+	event.preventDefault();
+	console.log("Todo Edit");
+}
+
+function projectSubmitHandler(event) {
 	event.preventDefault();
 
 	const projectData = new FormData(event.target);
@@ -47,12 +51,13 @@ function handleProjectSubmit(event) {
 		(project) => project !== inbox,
 	);
 
-	sidebarUI.renderProjects(projectsWithoutInbox, switchProject);
+	sidebar.renderProjects(projectsWithoutInbox, switchProject);
 	switchProject(newProject);
 }
 
-forms.todo.addEventListener("submit", handleTodoSubmit);
-forms.project.addEventListener("submit", handleProjectSubmit);
+todoContent.addListenerForTodoAdd(addTodoHandler);
+todoContent.addListenerForTodoEdit(editTodoHandler);
+forms.project.addEventListener("submit", projectSubmitHandler);
 elements.inboxItem.addEventListener("click", () => {
 	switchProject(inbox);
 });
