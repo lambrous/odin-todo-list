@@ -30,10 +30,20 @@ function addTodoHandler(event) {
 	event.target.reset();
 }
 
-// todo:
 function editTodoHandler(event) {
 	event.preventDefault();
-	console.log("Todo Edit");
+
+	const todoFormData = new FormData(event.target);
+	const todoData = Object.fromEntries(todoFormData);
+
+	const todoToEditID = todoContent.getSelectedTodoElementID();
+	const todoToEdit = currentProject.getTodoByID(todoToEditID);
+	todoToEdit.title = todoData.title;
+	console.log(currentProject.todos);
+
+	todoContent.editTodoItem(todoToEdit);
+	todoContent.hideTodoForm();
+	event.target.reset();
 }
 
 function projectSubmitHandler(event) {

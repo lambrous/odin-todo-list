@@ -16,6 +16,10 @@ class TodoList {
 		return this.#id;
 	}
 
+	getTodoByID(id) {
+		return this.#todos.get(id);
+	}
+
 	addTodo(todo) {
 		this.#todos.set(todo.id, todo);
 	}

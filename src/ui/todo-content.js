@@ -1,6 +1,7 @@
 import { elements, forms, renderList } from "./base";
 
 let selectedTodoElement = null;
+export const getSelectedTodoElementID = () => selectedTodoElement.dataset.id;
 
 function showTodoForm(elementToReplace = null) {
 	if (elementToReplace === null) {
@@ -39,15 +40,21 @@ function handleEscapePress(event) {
 	if (event.key === "Escape") hideTodoForm();
 }
 
-export function createTodoElement({ title }) {
+export function createTodoElement(todo) {
 	const todoElement = document.createElement("li");
-	todoElement.textContent = title;
+	todoElement.textContent = todo.title;
+	todoElement.dataset.id = todo.id;
 	todoElement.addEventListener("dblclick", () => {
 		showTodoForm(todoElement);
 		forms.todo.removeEventListener("submit", addTodoHandler);
 		forms.todo.addEventListener("submit", editTodoHandler);
 	});
 	return todoElement;
+}
+
+export function editTodoItem(todo) {
+	const todoItem = elements.todoList.querySelector(`li[data-id="${todo.id}"`);
+	todoItem.textContent = todo.title;
 }
 
 export const renderTodos = renderList(elements.todoList, createTodoElement);
