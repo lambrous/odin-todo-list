@@ -1,9 +1,10 @@
 import { elements, forms, renderList } from "./base";
+import { createTodoElement } from "./todo-element";
 
 let selectedTodoElement = null;
 export const getSelectedTodoElementID = () => selectedTodoElement.dataset.id;
 
-function showTodoForm(elementToReplace = null) {
+export function showTodoForm(elementToReplace = null) {
 	if (elementToReplace === null) {
 		elements.todoList.append(forms.todo);
 	} else {
@@ -25,31 +26,26 @@ export function hideTodoForm() {
 	selectedTodoElement?.classList.remove("hidden");
 }
 
-let addTodoHandler = null;
-let editTodoHandler = null;
+export const submitHandler = {
+	addTodo: null,
+	editTodo: null,
+};
 
-export function addListenerForTodoAdd(handler) {
-	addTodoHandler = (event) => handler(event);
-}
+export function registerSubmitListener(action, callback) {
+	submitHandler[action] = (event) => {
+		event.preventDefault();
 
-export function addListenerForTodoEdit(handler) {
-	editTodoHandler = (event) => handler(event);
+		const formData = new FormData(event.target);
+		const todoFormData = Object.fromEntries(formData);
+		callback(todoFormData);
+
+		hideTodoForm();
+		event.target.reset();
+	};
 }
 
 function handleEscapePress(event) {
 	if (event.key === "Escape") hideTodoForm();
-}
-
-export function createTodoElement(todo) {
-	const todoElement = document.createElement("li");
-	todoElement.textContent = todo.title;
-	todoElement.dataset.id = todo.id;
-	todoElement.addEventListener("dblclick", () => {
-		showTodoForm(todoElement);
-		forms.todo.removeEventListener("submit", addTodoHandler);
-		forms.todo.addEventListener("submit", editTodoHandler);
-	});
-	return todoElement;
 }
 
 export function editTodoItem(todo) {
@@ -61,6 +57,6 @@ export const renderTodos = renderList(elements.todoList, createTodoElement);
 
 elements.addTodoButton.addEventListener("click", () => {
 	showTodoForm(elements.addTodoButton);
-	forms.todo.removeEventListener("submit", editTodoHandler);
-	forms.todo.addEventListener("submit", addTodoHandler);
+	forms.todo.removeEventListener("submit", submitHandler.editTodo);
+	forms.todo.addEventListener("submit", submitHandler.addTodo);
 });

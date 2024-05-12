@@ -16,36 +16,6 @@ function switchProject(project) {
 	sidebar.toggleActiveNavItem(currentProject.id);
 }
 
-function addTodoHandler(event) {
-	event.preventDefault();
-
-	const todoFormData = new FormData(event.target);
-	const todoData = Object.fromEntries(todoFormData);
-
-	const newTodo = new TodoItem(todoData);
-	currentProject.addTodo(newTodo);
-
-	todoContent.renderTodos(currentProject.todos);
-	todoContent.hideTodoForm();
-	event.target.reset();
-}
-
-function editTodoHandler(event) {
-	event.preventDefault();
-
-	const todoFormData = new FormData(event.target);
-	const todoData = Object.fromEntries(todoFormData);
-
-	const todoToEditID = todoContent.getSelectedTodoElementID();
-	const todoToEdit = currentProject.getTodoByID(todoToEditID);
-	todoToEdit.title = todoData.title;
-	console.log(currentProject.todos);
-
-	todoContent.editTodoItem(todoToEdit);
-	todoContent.hideTodoForm();
-	event.target.reset();
-}
-
 function projectSubmitHandler(event) {
 	event.preventDefault();
 
@@ -65,9 +35,23 @@ function projectSubmitHandler(event) {
 	switchProject(newProject);
 }
 
-todoContent.addListenerForTodoAdd(addTodoHandler);
-todoContent.addListenerForTodoEdit(editTodoHandler);
+function onTodoAdd(formData) {
+	const newTodo = new TodoItem(formData);
+	currentProject.addTodo(newTodo);
+	todoContent.renderTodos(currentProject.todos);
+}
+
+function onTodoEdit(formData) {
+	const todoToEditID = todoContent.getSelectedTodoElementID();
+	const todoToEdit = currentProject.getTodoByID(todoToEditID);
+	todoToEdit.title = formData.title;
+
+	todoContent.editTodoItem(todoToEdit);
+}
+
 forms.project.addEventListener("submit", projectSubmitHandler);
+todoContent.registerSubmitListener("addTodo", onTodoAdd);
+todoContent.registerSubmitListener("editTodo", onTodoEdit);
 elements.inboxItem.addEventListener("click", () => {
 	switchProject(inbox);
 });
