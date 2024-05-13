@@ -14,7 +14,7 @@ export function showTodoForm(elementToReplace = null) {
 		elementToReplace.insertAdjacentElement("afterend", forms.todo);
 	}
 
-	forms.todo.classList.remove("hidden");
+	forms.todo.hidden = false;
 	forms.todo.querySelector("input").focus();
 	forms.todo.addEventListener("keydown", handleEscapePress);
 	forms.todo.addEventListener("focusout", hideTodoForm);
@@ -23,7 +23,7 @@ export function showTodoForm(elementToReplace = null) {
 export function hideTodoForm() {
 	forms.todo.removeEventListener("keydown", handleEscapePress);
 	forms.todo.removeEventListener("focusout", hideTodoForm);
-	forms.todo.classList.add("hidden");
+	forms.todo.hidden = true;
 	selectedTodoElement?.classList.remove("hidden");
 }
 

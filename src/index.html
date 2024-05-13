@@ -44,6 +44,31 @@
 					<span class="material-symbols-outlined icon"> add_box </span>
 					<span class="text">Add Todo</span>
 				</button>
+				<form action="#" id="todo-form" autocomplete="off" hidden>
+					<input
+						type="text"
+						name="title"
+						id="todo-title"
+						placeholder="New Todo"
+						autofocus
+					/>
+					<textarea
+						name="description"
+						id="todo-description"
+						placeholder="Description"
+						rows="1"
+					></textarea>
+					<div class="form-section">
+						<input type="date" name="dueDate" id="todo-due-date" />
+						<select name="priority" id="todo-priority">
+							<option value="0" disabled selected>Select Priority</option>
+							<option value="0">None</option>
+							<option value="1">Low</option>
+							<option value="2">Medium</option>
+							<option value="3">High</option>
+						</select>
+					</div>
+				</form>
 			</div>
 		</main>
 	</body>

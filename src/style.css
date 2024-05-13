@@ -282,3 +282,50 @@ ul {
 		font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 200, "opsz" 24;
 	}
 }
+
+#todo-form {
+	border: 1px solid;
+	border-color: color-mix(in srgb, var(--color-primary), transparent 60%);
+	padding: 1rem 0.5rem;
+	border-radius: 0.5rem;
+
+	input,
+	textarea,
+	select {
+		border: 0;
+		background-color: initial;
+	}
+
+	#todo-title,
+	#todo-description {
+		display: block;
+		width: 100%;
+		padding: 0.5rem;
+
+		&:focus {
+			outline: none;
+		}
+	}
+
+	#todo-title {
+		font-size: 1rem;
+	}
+
+	#todo-description {
+		resize: none;
+		margin-top: 0.25rem;
+		height: max-content;
+	}
+
+	.form-section {
+		text-align: right;
+	}
+
+	#todo-due-date,
+	#todo-priority {
+		border: 1px solid;
+		border-color: color-mix(in srgb, var(--color-text), transparent 60%);
+		border-radius: 0.25rem;
+		padding: 0.5rem 0.25rem;
+	}
+}
