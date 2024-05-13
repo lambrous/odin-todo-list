@@ -18,6 +18,7 @@
 		var(--color-background) 40%
 	);
 
+	--color-primary-l5: color-mix(in srgb, var(--color-primary), transparent 90%);
 	--font-base: "Inter", system-ui, sans-serif;
 }
 
@@ -136,11 +137,7 @@ ul {
 		}
 
 		&:hover:not(.active) {
-			background-color: color-mix(
-				in srgb,
-				var(--color-primary),
-				transparent 90%
-			);
+			background-color: var(--color-primary-l5);
 		}
 	}
 }
@@ -236,7 +233,7 @@ ul {
 	}
 
 	.header {
-		margin-bottom: 2rem;
+		margin-bottom: 1.5rem;
 	}
 
 	h1 {
@@ -244,11 +241,44 @@ ul {
 		font-weight: 600;
 	}
 
-	#add-todo-btn {
+	.todo-item {
 		display: flex;
 		align-items: center;
 		font-size: 1rem;
 		line-height: normal;
 		gap: 0.5rem;
+		width: 100%;
+		padding: 0.375rem;
+		border-radius: 0.25rem;
+	}
+
+	#add-todo-btn {
+		width: initial;
+
+		.text {
+			color: var(--color-text-02);
+		}
+
+		&:hover .icon {
+			font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 200, "opsz" 24;
+		}
+
+		&:hover .text {
+			color: initial;
+			text-decoration: underline 2px;
+			text-underline-offset: 0.25rem;
+		}
+	}
+}
+
+#todos {
+	.todo-item {
+		&:hover {
+			background-color: var(--color-primary-l5);
+		}
+	}
+
+	.icon:hover {
+		font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 200, "opsz" 24;
 	}
 }

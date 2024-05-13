@@ -2,6 +2,7 @@ import { elements, forms, renderList } from "./base";
 import { createTodoElement } from "./todo-element";
 
 let selectedTodoElement = null;
+export const getSelectedTodoElement = () => selectedTodoElement;
 export const getSelectedTodoElementID = () => selectedTodoElement.dataset.id;
 
 export function showTodoForm(elementToReplace = null) {
@@ -31,13 +32,25 @@ export const submitHandler = {
 	editTodo: null,
 };
 
+function elementUpdater(element) {
+	if (!element || element === elements.addTodoButton) return null;
+	return {
+		id: element.dataset.id,
+		updateTitle: (title) => {
+			element.querySelector("h4").textContent = title;
+		},
+	};
+}
+
 export function registerSubmitListener(action, callback) {
 	submitHandler[action] = (event) => {
 		event.preventDefault();
 
 		const formData = new FormData(event.target);
 		const todoFormData = Object.fromEntries(formData);
-		callback(todoFormData);
+		const selectedElement = getSelectedTodoElement();
+		const element = elementUpdater(selectedElement);
+		callback(todoFormData, element);
 
 		hideTodoForm();
 		event.target.reset();
@@ -46,11 +59,6 @@ export function registerSubmitListener(action, callback) {
 
 function handleEscapePress(event) {
 	if (event.key === "Escape") hideTodoForm();
-}
-
-export function editTodoItem(todo) {
-	const todoItem = elements.todoList.querySelector(`li[data-id="${todo.id}"`);
-	todoItem.textContent = todo.title;
 }
 
 export const renderTodos = renderList(elements.todoList, createTodoElement);

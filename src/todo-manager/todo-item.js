@@ -22,6 +22,10 @@ class TodoItem {
 		this.isComplete = true;
 	}
 
+	toggleCompletion() {
+		this.isComplete = !this.isComplete;
+	}
+
 	updateProperty(property, value) {
 		if (property in this) {
 			this[property] = value;
