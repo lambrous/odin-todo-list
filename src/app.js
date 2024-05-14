@@ -38,16 +38,20 @@ function projectSubmitHandler(event) {
 	switchProject(newProject);
 }
 
-function onTodoAdd(formData) {
+function onSubmitTodoAdd(formData) {
 	const newTodo = new TodoItem(formData);
 	currentProject.addTodo(newTodo);
 	todoContent.renderTodos(currentProject.todos, todoItemHandler);
 }
 
-function onTodoEdit(formData, targetElement) {
+function onSubmitTodoEdit(formData, targetElement) {
 	const todoToEditID = targetElement.id;
 	const todoToEdit = currentProject.getTodoByID(todoToEditID);
-	todoToEdit.title = formData.title;
+
+	for (const key in formData) {
+		todoToEdit.updateProperty(key, formData[key]);
+	}
+
 	targetElement.updateTitle(todoToEdit.title);
 }
 
@@ -58,8 +62,8 @@ function onTodoComplete(todoID, toggleButton) {
 }
 
 form.project.addEventListener("submit", projectSubmitHandler);
-todoContent.registerSubmitListener("addTodo", onTodoAdd);
-todoContent.registerSubmitListener("editTodo", onTodoEdit);
+todoContent.registerSubmitListener("addTodo", onSubmitTodoAdd);
+todoContent.registerSubmitListener("editTodo", onSubmitTodoEdit);
 element.inboxItem.addEventListener("click", () => {
 	switchProject(inbox);
 });

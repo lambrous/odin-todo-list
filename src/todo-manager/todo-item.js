@@ -36,15 +36,16 @@ class TodoItem {
 		return this.#priority;
 	}
 
-	set priority(value) {
+	set priority(value = 0) {
+		const priorityValue = +value;
 		if (
-			typeof value !== "number" ||
-			value < TodoItem.MIN_PRIORITY ||
-			value > TodoItem.MAX_PRIORITY
+			Number.isNaN(priorityValue) ||
+			priorityValue < TodoItem.MIN_PRIORITY ||
+			priorityValue > TodoItem.MAX_PRIORITY
 		) {
-			return;
+			this.#priority = 0;
 		}
-		this.#priority = value;
+		this.#priority = priorityValue;
 	}
 }
 

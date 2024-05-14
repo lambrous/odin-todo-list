@@ -18,7 +18,7 @@ export function createTodoElement(todo, handler) {
 	todoElement.append(todoCompleteButton, todoTitle);
 	todoElement.addEventListener("click", (event) => {
 		if (event.target.closest("button")) return;
-		showTodoForm(todoElement);
+		showTodoForm(todoElement, todo);
 		form.todo.removeEventListener("submit", submitHandler.addTodo);
 		form.todo.addEventListener("submit", submitHandler.editTodo);
 	});

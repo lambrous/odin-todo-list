@@ -1,20 +1,26 @@
 import { element, form, renderList } from "./base";
 import { createTodoElement } from "./todo-element";
 
-let selectedTodoElement = null;
-export const getSelectedTodoElement = () => selectedTodoElement;
-export const getSelectedTodoElementID = () => selectedTodoElement.dataset.id;
+let currentTodoElement = null;
+export const getCurrentTodoElement = () => currentTodoElement;
 
-export function showTodoForm(elementToReplace = null) {
+export function showTodoForm(elementToReplace = null, todo = null) {
+	currentTodoElement?.classList.remove("hidden");
+	form.todo.reset();
+
 	if (elementToReplace === null) {
 		element.todoList.append(form.todo);
 	} else {
-		selectedTodoElement = elementToReplace;
+		currentTodoElement = elementToReplace;
 		elementToReplace.classList.add("hidden");
 		elementToReplace.insertAdjacentElement("afterend", form.todo);
 	}
 
 	form.todo.hidden = false;
+	if (elementToReplace !== element.addTodoButton) {
+		fillForm(todo);
+	}
+
 	form.todo.querySelector("input").focus();
 	form.todo.addEventListener("keydown", handleEscapePress);
 	document.addEventListener("click", handleClickOutsideForm);
@@ -24,7 +30,26 @@ export function hideTodoForm() {
 	form.todo.removeEventListener("keydown", handleEscapePress);
 	document.removeEventListener("click", handleClickOutsideForm);
 	form.todo.hidden = true;
-	selectedTodoElement?.classList.remove("hidden");
+	currentTodoElement?.classList.remove("hidden");
+}
+
+function fillForm(todo) {
+	const input = {
+		title: form.todo.querySelector("#todo-title"),
+		description: form.todo.querySelector("#todo-description"),
+		dueDate: form.todo.querySelector("#todo-due-date"),
+		priority: form.todo.querySelector("#todo-priority"),
+	};
+
+	for (const key in input) {
+		if (
+			todo[key] !== null ||
+			todo[key] !== undefined ||
+			todo[key] !== "" ||
+			key in todo
+		)
+			input[key].value = todo[key];
+	}
 }
 
 export const submitHandler = {
@@ -48,12 +73,11 @@ export function registerSubmitListener(action, callback) {
 
 		const formData = new FormData(event.target);
 		const todoFormData = Object.fromEntries(formData);
-		const selectedElement = getSelectedTodoElement();
+		const selectedElement = getCurrentTodoElement();
 		const element = elementUpdater(selectedElement);
 		callback(todoFormData, element);
 
 		hideTodoForm();
-		event.target.reset();
 	};
 }
 
