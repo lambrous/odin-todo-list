@@ -1,4 +1,4 @@
-import { elements, forms, renderList } from "./base";
+import { element, form, renderList } from "./base";
 import { createTodoElement } from "./todo-element";
 
 let selectedTodoElement = null;
@@ -7,23 +7,23 @@ export const getSelectedTodoElementID = () => selectedTodoElement.dataset.id;
 
 export function showTodoForm(elementToReplace = null) {
 	if (elementToReplace === null) {
-		elements.todoList.append(forms.todo);
+		element.todoList.append(form.todo);
 	} else {
 		selectedTodoElement = elementToReplace;
 		elementToReplace.classList.add("hidden");
-		elementToReplace.insertAdjacentElement("afterend", forms.todo);
+		elementToReplace.insertAdjacentElement("afterend", form.todo);
 	}
 
-	forms.todo.hidden = false;
-	forms.todo.querySelector("input").focus();
-	forms.todo.addEventListener("keydown", handleEscapePress);
-	forms.todo.addEventListener("focusout", hideTodoForm);
+	form.todo.hidden = false;
+	form.todo.querySelector("input").focus();
+	form.todo.addEventListener("keydown", handleEscapePress);
+	document.addEventListener("click", handleClickOutsideForm);
 }
 
 export function hideTodoForm() {
-	forms.todo.removeEventListener("keydown", handleEscapePress);
-	forms.todo.removeEventListener("focusout", hideTodoForm);
-	forms.todo.hidden = true;
+	form.todo.removeEventListener("keydown", handleEscapePress);
+	document.removeEventListener("click", handleClickOutsideForm);
+	form.todo.hidden = true;
 	selectedTodoElement?.classList.remove("hidden");
 }
 
@@ -33,7 +33,7 @@ export const submitHandler = {
 };
 
 function elementUpdater(element) {
-	if (!element || element === elements.addTodoButton) return null;
+	if (!element || element === element.addTodoButton) return null;
 	return {
 		id: element.dataset.id,
 		updateTitle: (title) => {
@@ -61,10 +61,22 @@ function handleEscapePress(event) {
 	if (event.key === "Escape") hideTodoForm();
 }
 
-export const renderTodos = renderList(elements.todoList, createTodoElement);
+const handleClickOutsideForm = (event) => {
+	const rect = form.todo.getBoundingClientRect();
+	if (
+		event.clientY < rect.top ||
+		event.clientY > rect.bottom ||
+		event.clientX < rect.left ||
+		event.clientX > rect.right
+	) {
+		hideTodoForm();
+	}
+};
 
-elements.addTodoButton.addEventListener("click", () => {
-	showTodoForm(elements.addTodoButton);
-	forms.todo.removeEventListener("submit", submitHandler.editTodo);
-	forms.todo.addEventListener("submit", submitHandler.addTodo);
+export const renderTodos = renderList(element.todoList, createTodoElement);
+
+element.addTodoButton.addEventListener("click", () => {
+	showTodoForm(element.addTodoButton);
+	form.todo.removeEventListener("submit", submitHandler.editTodo);
+	form.todo.addEventListener("submit", submitHandler.addTodo);
 });

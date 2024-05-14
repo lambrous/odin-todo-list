@@ -1,21 +1,22 @@
 import "./style.css";
 import TodoItem from "./todo-manager/todo-item";
 import todoManager from "./todo-manager/todo-list";
-import { forms, elements, todoContent, sidebar } from "./ui/ui";
+import { form, element, todoContent, sidebar } from "./ui/ui";
 
 let currentProject = null;
 
 const inbox = todoManager.createProject("Inbox");
-elements.inboxItem.setAttribute("data-key", inbox.id);
+element.inboxItem.setAttribute("data-key", inbox.id);
 
 const todoItemHandler = { onTodoComplete };
 
 function switchProject(project) {
 	if (currentProject === project) return;
 	currentProject = project;
-	elements.projectHeading.textContent = currentProject.name;
+	element.projectHeading.textContent = currentProject.name;
 	todoContent.renderTodos(currentProject.todos, todoItemHandler);
 	sidebar.toggleActiveNavItem(currentProject.id);
+	todoContent.hideTodoForm();
 }
 
 function projectSubmitHandler(event) {
@@ -43,11 +44,11 @@ function onTodoAdd(formData) {
 	todoContent.renderTodos(currentProject.todos, todoItemHandler);
 }
 
-function onTodoEdit(formData, element) {
-	const todoToEditID = element.id;
+function onTodoEdit(formData, targetElement) {
+	const todoToEditID = targetElement.id;
 	const todoToEdit = currentProject.getTodoByID(todoToEditID);
 	todoToEdit.title = formData.title;
-	element.updateTitle(todoToEdit.title);
+	targetElement.updateTitle(todoToEdit.title);
 }
 
 function onTodoComplete(todoID, toggleButton) {
@@ -56,10 +57,10 @@ function onTodoComplete(todoID, toggleButton) {
 	toggleButton(todoItem.isComplete);
 }
 
-forms.project.addEventListener("submit", projectSubmitHandler);
+form.project.addEventListener("submit", projectSubmitHandler);
 todoContent.registerSubmitListener("addTodo", onTodoAdd);
 todoContent.registerSubmitListener("editTodo", onTodoEdit);
-elements.inboxItem.addEventListener("click", () => {
+element.inboxItem.addEventListener("click", () => {
 	switchProject(inbox);
 });
 

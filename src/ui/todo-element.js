@@ -1,5 +1,5 @@
 import { showTodoForm, submitHandler } from "./todo-content";
-import { elements, forms } from "./base";
+import { element, form } from "./base";
 
 export function createTodoElement(todo, handler) {
 	const todoElement = document.createElement("li");
@@ -19,8 +19,8 @@ export function createTodoElement(todo, handler) {
 	todoElement.addEventListener("click", (event) => {
 		if (event.target.closest("button")) return;
 		showTodoForm(todoElement);
-		forms.todo.removeEventListener("submit", submitHandler.addTodo);
-		forms.todo.addEventListener("submit", submitHandler.editTodo);
+		form.todo.removeEventListener("submit", submitHandler.addTodo);
+		form.todo.addEventListener("submit", submitHandler.editTodo);
 	});
 
 	return todoElement;

@@ -1,4 +1,4 @@
-import { elements, renderList } from "./base";
+import { element, renderList } from "./base";
 
 export function createProjectElement(project, onClick) {
 	const projectElement = document.createElement("li");
@@ -24,7 +24,7 @@ export function createProjectElement(project, onClick) {
 }
 
 export const renderProjects = renderList(
-	elements.projectList,
+	element.projectList,
 	createProjectElement,
 );
 

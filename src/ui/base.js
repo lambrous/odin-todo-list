@@ -1,15 +1,15 @@
-export const forms = {
+export const form = {
 	todo: document.querySelector("#todo-form"),
 	project: document.querySelector("#project-form"),
 };
 
-export const elements = {
+export const element = {
 	sidebar: document.querySelector("#sidebar"),
 	todoList: document.querySelector("#todos"),
 	projectList: document.querySelector("#projects-list"),
 	projectHeading: document.querySelector("h1.project-name"),
 	inboxItem: document.querySelector(".inbox-button"),
-	projectInput: forms.project.querySelector("input"),
+	projectInput: form.project.querySelector("input"),
 	addTodoButton: document.querySelector("#add-todo-btn"),
 };
 
@@ -27,11 +27,11 @@ function blurOnEscapePress(event) {
 	if (event.key === "Escape") event.target.blur();
 }
 
-elements.projectInput.addEventListener("blur", (event) => {
+element.projectInput.addEventListener("blur", (event) => {
 	event.target.value = null;
 	document.removeEventListener("keydown", blurOnEscapePress);
 });
 
-elements.projectInput.addEventListener("focus", () => {
+element.projectInput.addEventListener("focus", () => {
 	document.addEventListener("keydown", blurOnEscapePress);
 });
