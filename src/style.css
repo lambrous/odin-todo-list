@@ -6,6 +6,7 @@
 	--color-primary: #874b6d;
 	--color-secondary: #715764;
 	--color-accent: #80543c;
+	--color-error: #ba1a1a;
 
 	--color-text-02: color-mix(
 		in srgb,
@@ -226,9 +227,10 @@ ul {
 
 #content {
 	padding-block: 4rem;
+	overflow: hidden;
 
 	.container {
-		width: min(800px, calc(100% - 4rem));
+		width: min(900px, calc(100% - 4rem));
 		margin-inline: auto;
 	}
 
@@ -239,17 +241,6 @@ ul {
 	h1 {
 		font-size: 1.5rem;
 		font-weight: 600;
-	}
-
-	.todo-item {
-		display: flex;
-		align-items: center;
-		font-size: 1rem;
-		line-height: normal;
-		gap: 0.5rem;
-		width: 100%;
-		padding: 0.375rem;
-		border-radius: 0.25rem;
 	}
 
 	#add-todo-btn {
@@ -270,24 +261,126 @@ ul {
 		}
 	}
 }
+.todo-item {
+	padding: 0.75rem 0.375rem;
 
-#todos {
-	.todo-item {
-		&:hover {
-			background-color: var(--color-primary-l5);
+	.todo-header {
+		display: flex;
+		align-items: center;
+		font-size: 1rem;
+		line-height: normal;
+		gap: 0.5rem;
+		width: 100%;
+		overflow: hidden;
+	}
+}
+
+#todos .todo-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	border-bottom: 1px solid;
+	border-color: color-mix(in srgb, var(--color-text), transparent 80%);
+	cursor: pointer;
+
+	.title {
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+	}
+
+	.icon {
+		font-size: 1.375em;
+	}
+
+	&:hover {
+		background-color: var(--color-primary-l5);
+	}
+
+	.todo-header button:hover .icon {
+		font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 200, "opsz" 24;
+	}
+
+	.info-container {
+		overflow: hidden;
+	}
+
+	.description {
+		font-size: 0.875rem;
+		font-weight: 300;
+		color: var(--color-text-02);
+		margin-inline: 1.875rem 1rem;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		display: -webkit-box;
+		-webkit-line-clamp: 1;
+		-webkit-box-orient: vertical;
+	}
+
+	.priority {
+		display: flex;
+		align-items: center;
+		gap: 0.2em;
+		font-size: 0.625rem;
+		border-radius: 99rem;
+		padding: 0.25em 0.75em;
+		margin-left: 0.75rem;
+
+		&.priority-3 {
+			color: var(--color-error);
+			background-color: color-mix(in srgb, var(--color-error), transparent 90%);
+		}
+
+		&.priority-2 {
+			color: color-mix(
+				in srgb,
+				var(--color-accent) 90%,
+				var(--color-background)
+			);
+			background-color: color-mix(
+				in srgb,
+				var(--color-accent),
+				transparent 90%
+			);
+		}
+
+		&.priority-1 {
+			color: color-mix(in srgb, var(--color-text) 60%, var(--color-background));
+			background-color: color-mix(
+				in srgb,
+				var(--color-text-03),
+				transparent 95%
+			);
 		}
 	}
 
-	.icon:hover {
-		font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 200, "opsz" 24;
+	.date-container {
+		color: var(--color-primary);
+		margin-left: 1rem;
+	}
+
+	.date {
+		display: flex;
+		align-items: center;
+		gap: 0.2em;
+
+		.icon {
+			margin-left: auto;
+			font-size: 1.125em;
+		}
+
+		.text {
+			width: max-content;
+		}
 	}
 }
 
 #todo-form {
 	border: 1px solid;
-	border-color: color-mix(in srgb, var(--color-primary), transparent 60%);
+	border-color: color-mix(in srgb, var(--color-text), transparent 80%);
 	padding: 1rem 0.5rem;
 	border-radius: 0.5rem;
+	margin-block: 1rem;
 
 	input,
 	textarea,
