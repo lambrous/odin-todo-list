@@ -41,18 +41,15 @@ function projectSubmitHandler(event) {
 function onSubmitTodoAdd(formData) {
 	const newTodo = new TodoItem(formData);
 	currentProject.addTodo(newTodo);
-	todoContent.renderTodos(currentProject.todos, todoItemHandler);
+	todoContent.addTodoElement(newTodo, todoItemHandler);
 }
 
 function onSubmitTodoEdit(formData, targetElement) {
-	const todoToEditID = targetElement.id;
-	const todoToEdit = currentProject.getTodoByID(todoToEditID);
-
+	const todoItem = currentProject.getTodoByID(targetElement.id);
 	for (const key in formData) {
-		todoToEdit.updateProperty(key, formData[key]);
+		todoItem.updateProperty(key, formData[key]);
 	}
-
-	targetElement.updateTitle(todoToEdit.title);
+	targetElement.updateContent(todoItem, todoItemHandler);
 }
 
 function onTodoComplete(todoID, toggleButton) {

@@ -57,16 +57,6 @@ export const submitHandler = {
 	editTodo: null,
 };
 
-function elementUpdater(element) {
-	if (!element || element === element.addTodoButton) return null;
-	return {
-		id: element.dataset.id,
-		updateTitle: (title) => {
-			element.querySelector("h4").textContent = title;
-		},
-	};
-}
-
 export function registerSubmitListener(action, callback) {
 	submitHandler[action] = (event) => {
 		event.preventDefault();
@@ -79,6 +69,24 @@ export function registerSubmitListener(action, callback) {
 
 		hideTodoForm();
 	};
+}
+
+function elementUpdater(element) {
+	if (!element || element === element.addTodoButton) return null;
+	return {
+		id: element.dataset.id,
+		updateContent: updateTodoElement,
+	};
+}
+
+function updateTodoElement(todo, handler) {
+	const updatedTodoElement = createTodoElement(todo, handler);
+	currentTodoElement.replaceChildren(...updatedTodoElement.children);
+}
+
+export function addTodoElement(todo, handler) {
+	const todoElement = createTodoElement(todo, handler);
+	element.todoList.append(todoElement);
 }
 
 function handleEscapePress(event) {
