@@ -377,7 +377,7 @@ ul {
 
 #todo-form {
 	border: 1px solid;
-	border-color: color-mix(in srgb, var(--color-text), transparent 80%);
+	border-color: color-mix(in srgb, var(--color-secondary), transparent);
 	padding: 1rem 0.5rem;
 	border-radius: 0.5rem;
 	margin-block: 1rem;
@@ -393,7 +393,6 @@ ul {
 	#todo-description {
 		display: block;
 		width: 100%;
-		padding: 0.5rem;
 
 		&:focus {
 			outline: none;
@@ -406,19 +405,40 @@ ul {
 
 	#todo-description {
 		resize: none;
-		margin-top: 0.25rem;
 		height: max-content;
+		margin-top: 0.25rem;
+		font-weight: 300;
 	}
 
 	.form-section {
-		text-align: right;
+		margin-top: 1rem;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 	}
 
 	#todo-due-date,
 	#todo-priority {
+		color: var(--color-secondary);
 		border: 1px solid;
-		border-color: color-mix(in srgb, var(--color-text), transparent 60%);
+		border-color: color-mix(in srgb, var(--color-secondary), transparent);
 		border-radius: 0.25rem;
-		padding: 0.5rem 0.25rem;
+		padding: 0.25rem;
+		font-size: 0.75rem;
+	}
+
+	button[type="submit"] {
+		background-color: var(--color-primary);
+		color: var(--color-background);
+		padding: 0.5em 1.25em;
+		border-radius: 0.25rem;
+	}
+
+	&:invalid button[type="submit"] {
+		background-color: color-mix(
+			in srgb,
+			var(--color-primary),
+			var(--color-background) 60%
+		);
 	}
 }

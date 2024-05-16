@@ -46,7 +46,7 @@
 						<span class="text">Add Todo</span>
 					</div>
 				</button>
-				<form action="#" id="todo-form" autocomplete="off" hidden>
+				<form action="#" id="todo-form" autocomplete="off">
 					<input
 						type="text"
 						name="title"
@@ -63,14 +63,19 @@
 						maxlength="250"
 					></textarea>
 					<div class="form-section">
-						<input type="date" name="dueDate" id="todo-due-date" />
-						<select name="priority" id="todo-priority">
-							<option value="0" disabled selected>Select Priority</option>
-							<option value="0">None</option>
-							<option value="1">Low</option>
-							<option value="2">Normal</option>
-							<option value="3">High</option>
-						</select>
+						<div>
+							<input type="date" name="dueDate" id="todo-due-date" />
+							<select name="priority" id="todo-priority">
+								<option disabled selected>Priority</option>
+								<option value="0">None</option>
+								<option value="1">Low</option>
+								<option value="2">Normal</option>
+								<option value="3">High</option>
+							</select>
+						</div>
+						<div>
+							<button type="submit">Submit</button>
+						</div>
 					</div>
 				</form>
 			</div>
