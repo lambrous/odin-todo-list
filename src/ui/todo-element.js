@@ -1,5 +1,6 @@
 import { showTodoForm, submitHandler } from "./todo-content";
 import { element, form } from "./base";
+import { getRelativeDate } from "../helpers/date";
 
 export function createTodoElement(todo, handler) {
 	const todoElement = document.createElement("li");
@@ -99,24 +100,27 @@ const createDescriptionElement = (description) => {
 	return descriptionText;
 };
 
-const createDateElement = (date) => {
-	if (!date) return "";
+const createDateElement = (dueDate) => {
+	if (!dueDate) return "";
 	const dateContainer = document.createElement("div");
 	dateContainer.classList.add("date-container");
 
 	const dateSpan = document.createElement("span");
 	dateSpan.classList.add("date");
 
+	const { daysDiff, relativeDateDescription } = getRelativeDate(dueDate);
+
 	const dateIcon = document.createElement("span");
 	dateIcon.classList.add("icon", "material-symbols-outlined");
-	dateIcon.textContent = "hourglass_top";
+	dateIcon.textContent = `hourglass_${daysDiff < 0 ? "bottom" : "top"}`;
 
 	const dateText = document.createElement("span");
 	dateText.classList.add("text");
-	dateText.textContent = date;
+	dateText.textContent = relativeDateDescription;
 
 	dateSpan.append(dateIcon, dateText);
 	dateContainer.append(dateSpan);
+	dateContainer.classList.toggle("due", daysDiff < 1);
 
 	return dateContainer;
 };

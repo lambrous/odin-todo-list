@@ -355,8 +355,12 @@ ul {
 	}
 
 	.date-container {
-		color: var(--color-primary);
+		color: var(--color-secondary);
 		margin-left: 1rem;
+
+		&.due {
+			color: var(--color-error);
+		}
 	}
 
 	.date {
