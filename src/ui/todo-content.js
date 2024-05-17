@@ -89,6 +89,11 @@ export function addTodoElement(todo, handler) {
 	element.todoList.append(todoElement);
 }
 
+export function removeTodoElement(todoID) {
+	const todoElement = element.todoList?.querySelector(`[data-id="${todoID}"]`);
+	if (todoElement) element.todoList.removeChild(todoElement);
+}
+
 function handleEscapePress(event) {
 	if (event.key === "Escape") hideTodoForm();
 }

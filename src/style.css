@@ -282,6 +282,7 @@ ul {
 	border-bottom: 1px solid;
 	border-color: color-mix(in srgb, var(--color-text), transparent 80%);
 	cursor: pointer;
+	position: relative;
 
 	.title {
 		text-overflow: ellipsis;
@@ -295,6 +296,14 @@ ul {
 
 	&:hover {
 		background-color: var(--color-primary-l5);
+
+		#delete-todo-btn {
+			visibility: visible;
+		}
+
+		.date-container {
+			visibility: hidden;
+		}
 	}
 
 	.todo-header button:hover .icon {
@@ -357,6 +366,8 @@ ul {
 	.date-container {
 		color: var(--color-secondary);
 		margin-left: 1rem;
+		/* remove */
+		/* visibility: hidden; */
 
 		&.due {
 			color: var(--color-error);
@@ -375,6 +386,25 @@ ul {
 
 		.text {
 			width: max-content;
+		}
+	}
+
+	#delete-todo-btn {
+		position: absolute;
+		right: 0;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: end;
+		padding-inline: 0.5rem;
+		visibility: hidden;
+		background-color: transparent;
+		font-size: 1rem;
+		color: var(--color-text-03);
+
+		&:hover {
+			transform: scale(1.15);
+			color: var(--color-error);
 		}
 	}
 }

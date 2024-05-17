@@ -29,7 +29,8 @@ export function createTodoElement(todo, handler) {
 	infoContainer.append(headerContainer, descriptionText);
 
 	const dueDateElement = createDateElement(todo.dueDate);
-	todoElement.append(infoContainer, dueDateElement);
+	const deleteButton = createDeleteButton(todo.id, handler.onTodoDelete);
+	todoElement.append(infoContainer, dueDateElement, deleteButton);
 
 	todoElement.addEventListener("click", (event) => {
 		if (event.target.closest("button")) return;
@@ -43,8 +44,7 @@ export function createTodoElement(todo, handler) {
 
 const createTodoCompleteButton = (isComplete, todoID, onClick = null) => {
 	const todoCompleteButton = document.createElement("button");
-	const todoCompleteIcon = document.createElement("span");
-	todoCompleteIcon.classList.add("icon", "material-symbols-outlined");
+	const todoCompleteIcon = createIcon();
 	const toggleButton = (isComplete) => {
 		todoCompleteIcon.textContent = isComplete
 			? "check_box"
@@ -67,9 +67,7 @@ const createPriorityElement = (priority) => {
 	const priorityEl = document.createElement("span");
 	priorityEl.classList.add("priority", `priority-${priority}`);
 
-	const priorityIcon = document.createElement("span");
-	priorityIcon.classList.add("icon", "material-symbols-outlined");
-	priorityIcon.textContent = "flag";
+	const priorityIcon = createIcon("flag");
 
 	const priorityText = document.createElement("span");
 	priorityText.classList.add("text");
@@ -110,9 +108,7 @@ const createDateElement = (dueDate) => {
 
 	const { daysDiff, relativeDateDescription } = getRelativeDate(dueDate);
 
-	const dateIcon = document.createElement("span");
-	dateIcon.classList.add("icon", "material-symbols-outlined");
-	dateIcon.textContent = `hourglass_${daysDiff < 0 ? "bottom" : "top"}`;
+	const dateIcon = createIcon(`hourglass_${daysDiff < 0 ? "bottom" : "top"}`);
 
 	const dateText = document.createElement("span");
 	dateText.classList.add("text");
@@ -124,3 +120,24 @@ const createDateElement = (dueDate) => {
 
 	return dateContainer;
 };
+
+function createDeleteButton(todoID, onDelete) {
+	const deleteButton = document.createElement("button");
+	deleteButton.id = "delete-todo-btn";
+
+	const deleteIcon = createIcon("delete");
+	deleteButton.append(deleteIcon);
+
+	deleteButton.addEventListener("click", () => {
+		onDelete(todoID);
+	});
+
+	return deleteButton;
+}
+
+function createIcon(symbol = "") {
+	const icon = document.createElement("span");
+	icon.classList.add("icon", "material-symbols-outlined");
+	icon.textContent = symbol;
+	return icon;
+}

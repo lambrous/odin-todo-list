@@ -8,7 +8,7 @@ let currentProject = null;
 const inbox = todoManager.createProject("Inbox");
 element.inboxItem.setAttribute("data-key", inbox.id);
 
-const todoItemHandler = { onTodoComplete };
+const todoItemHandler = { onTodoComplete, onTodoDelete };
 
 function switchProject(project) {
 	if (currentProject === project) return;
@@ -56,6 +56,11 @@ function onTodoComplete(todoID, toggleButton) {
 	const todoItem = currentProject.getTodoByID(todoID);
 	todoItem.toggleCompletion();
 	toggleButton(todoItem.isComplete);
+}
+
+function onTodoDelete(todoID) {
+	currentProject.removeTodo(todoID);
+	todoContent.removeTodoElement(todoID);
 }
 
 form.project.addEventListener("submit", projectSubmitHandler);
