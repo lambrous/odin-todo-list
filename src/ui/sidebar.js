@@ -16,7 +16,7 @@ export function createProjectElement(project, onClick) {
 	projectButton.addEventListener("click", () => {
 		onClick(project);
 	});
-	projectButton.setAttribute("data-key", project.id);
+	projectButton.dataset.id = project.id;
 	projectButton.append(icon, nameSpan);
 
 	projectElement.replaceChildren(projectButton);
@@ -33,7 +33,28 @@ export function toggleActiveNavItem(itemID) {
 	activeNavItemButton?.classList.remove("active");
 
 	const selectedNavItemButton = document.querySelector(
-		`.nav-item button[data-key="${itemID}"]`,
+		`.nav-item button[data-id="${itemID}"]`,
 	);
 	selectedNavItemButton?.classList.add("active");
+}
+
+function blurOnEscapePress(event) {
+	if (event.key === "Escape") event.target.blur();
+}
+
+element.projectInput.addEventListener("blur", (event) => {
+	event.target.value = null;
+	document.removeEventListener("keydown", blurOnEscapePress);
+});
+
+element.projectInput.addEventListener("focus", () => {
+	document.addEventListener("keydown", blurOnEscapePress);
+});
+
+export function updateProjectName(projectID, newProjectName) {
+	const projectNavItem = document.querySelector(
+		`.nav-item [data-id="${projectID}"]`,
+	);
+	const projectTextSpan = projectNavItem.querySelector("span.text");
+	projectTextSpan.textContent = newProjectName;
 }

@@ -234,13 +234,20 @@ ul {
 		margin-inline: auto;
 	}
 
-	.header {
+	.project-heading {
+		font-size: 1.5rem;
+		font-weight: 600;
 		margin-bottom: 1.5rem;
 	}
 
-	h1 {
-		font-size: 1.5rem;
-		font-weight: 600;
+	.project-heading input {
+		border: 0;
+		background-color: transparent;
+		outline: 0;
+		width: 100%;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
 	}
 
 	#add-todo-btn {

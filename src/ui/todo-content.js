@@ -117,3 +117,19 @@ element.addTodoButton.addEventListener("click", () => {
 	form.todo.removeEventListener("submit", submitHandler.editTodo);
 	form.todo.addEventListener("submit", submitHandler.addTodo);
 });
+
+export const updateProjectName = (name, handler = null) => {
+	if (!handler) {
+		element.projectHeading.replaceChildren(name);
+		return;
+	}
+
+	const projectNameInput = document.createElement("input");
+	element.projectHeading.replaceChildren(projectNameInput);
+	projectNameInput.value = name;
+	projectNameInput.addEventListener("blur", handler);
+	projectNameInput.addEventListener("keydown", (event) => {
+		if (event.key === "Enter" || event.key === "Escape")
+			projectNameInput.blur();
+	});
+};

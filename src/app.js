@@ -6,14 +6,17 @@ import { form, element, todoContent, sidebar } from "./ui/ui";
 let currentProject = null;
 
 const inbox = todoManager.createProject("Inbox");
-element.inboxItem.setAttribute("data-key", inbox.id);
+element.inboxItem.dataset.id = inbox.id;
 
 const todoItemHandler = { onTodoComplete, onTodoDelete };
 
-function switchProject(project) {
+function switchProject(project, canModify = true) {
 	if (currentProject === project) return;
 	currentProject = project;
-	element.projectHeading.textContent = currentProject.name;
+	todoContent.updateProjectName(
+		currentProject.name,
+		canModify && projectNameChangeHandler,
+	);
 	todoContent.renderTodos(currentProject.todos, todoItemHandler);
 	sidebar.toggleActiveNavItem(currentProject.id);
 	todoContent.hideTodoForm();
@@ -63,11 +66,17 @@ function onTodoDelete(todoID) {
 	todoContent.removeTodoElement(todoID);
 }
 
+function projectNameChangeHandler(event) {
+	const updatedName = event.target.value;
+	currentProject.name = updatedName;
+	sidebar.updateProjectName(currentProject.id, currentProject.name);
+}
+
 form.project.addEventListener("submit", projectSubmitHandler);
 todoContent.registerSubmitListener("addTodo", onSubmitTodoAdd);
 todoContent.registerSubmitListener("editTodo", onSubmitTodoEdit);
 element.inboxItem.addEventListener("click", () => {
-	switchProject(inbox);
+	switchProject(inbox, false);
 });
 
-switchProject(inbox);
+switchProject(inbox, false);
