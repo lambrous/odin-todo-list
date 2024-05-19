@@ -1,7 +1,7 @@
 import "./style.css";
 import TodoItem from "./todo-manager/todo-item";
 import todoManager from "./todo-manager/todo-list";
-import { form, element, todoContent, sidebar } from "./ui/ui";
+import { form, element, todoContent, sidebar, confirmDialog } from "./ui/ui";
 
 let currentProject = null;
 
@@ -11,7 +11,10 @@ element.inboxItem.dataset.id = inbox.id;
 const todoItemHandler = { onTodoComplete, onTodoDelete };
 const projectItemHandler = {
 	onClick: switchProject,
-	onDelete: onProjectDelete,
+	onDelete: confirmDialog.addConfirmation(onProjectDelete, {
+		message: "Are you sure you want to proceed?",
+		confirm: "Delete",
+	}),
 };
 
 function switchProject(project, canModify = true) {

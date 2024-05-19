@@ -12,6 +12,7 @@ export const element = {
 	inboxButton: document.querySelector("#inbox-nav-item .project-btn"),
 	projectInput: form.project.querySelector("input"),
 	addTodoButton: document.querySelector("#add-todo-btn"),
+	confirmDialog: document.querySelector("dialog#confirm-dialog"),
 };
 
 export function renderList(container, createItem) {
