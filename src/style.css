@@ -105,11 +105,15 @@ ul {
 		}
 	}
 
+	.nav-item {
+		position: relative;
+	}
+
 	.icon {
 		margin-right: 0.5rem;
 	}
 
-	.nav-item button {
+	.nav-item .project-btn {
 		display: block;
 		padding: 0.5rem;
 		width: 100%;
@@ -123,23 +127,42 @@ ul {
 			white-space: nowrap;
 			overflow: hidden;
 		}
+	}
 
-		&.active {
-			background-color: color-mix(
-				in srgb,
-				var(--color-primary),
-				transparent 75%
-			);
-			color: var(--color-text);
-		}
+	.nav-item.active .project-btn {
+		background-color: color-mix(in srgb, var(--color-primary), transparent 75%);
+		color: var(--color-text);
 
-		&.active .icon {
+		.icon {
 			font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
 		}
+	}
 
-		&:hover:not(.active) {
-			background-color: var(--color-primary-l5);
+	.nav-item:not(.active):hover .project-btn {
+		background-color: var(--color-primary-l5);
+	}
+
+	#delete-project-btn {
+		position: absolute;
+		top: 0;
+		right: 0;
+		height: 100%;
+		padding-inline: 0.25em;
+		visibility: hidden;
+
+		.icon {
+			font-size: 1.25rem;
+			margin: 0;
 		}
+
+		&:hover .icon {
+			color: var(--color-error);
+			transform: scale(1.2);
+		}
+	}
+
+	.nav-item:hover #delete-project-btn {
+		visibility: visible;
 	}
 }
 
@@ -238,6 +261,7 @@ ul {
 		font-size: 1.5rem;
 		font-weight: 600;
 		margin-bottom: 1.5rem;
+		user-select: none;
 	}
 
 	.project-heading input {

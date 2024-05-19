@@ -1,5 +1,5 @@
 import { showTodoForm, submitHandler } from "./todo-content";
-import { element, form } from "./base";
+import { form, createIcon } from "./base";
 import { getRelativeDate } from "../helpers/date";
 
 export function createTodoElement(todo, handler) {
@@ -133,11 +133,4 @@ function createDeleteButton(todoID, onDelete) {
 	});
 
 	return deleteButton;
-}
-
-function createIcon(symbol = "") {
-	const icon = document.createElement("span");
-	icon.classList.add("icon", "material-symbols-outlined");
-	icon.textContent = symbol;
-	return icon;
 }

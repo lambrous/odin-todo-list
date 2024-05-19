@@ -1,41 +1,48 @@
-import { element, renderList } from "./base";
+import { element, renderList, createIcon } from "./base";
 
-export function createProjectElement(project, onClick) {
-	const projectElement = document.createElement("li");
-	projectElement.classList.add("nav-item");
+export function createProjectNavItem(project, handler) {
+	const navItem = document.createElement("li");
+	navItem.classList.add("nav-item");
+	navItem.dataset.id = project.id;
 
-	const icon = document.createElement("span");
-	icon.textContent = "tag";
-	icon.classList.add("material-symbols-outlined", "icon");
+	const icon = createIcon("tag");
 
 	const nameSpan = document.createElement("span");
 	nameSpan.classList.add("text");
 	nameSpan.textContent = project.name;
 
-	const projectButton = document.createElement("button");
-	projectButton.addEventListener("click", () => {
-		onClick(project);
+	const navButton = document.createElement("button");
+	navButton.classList.add("project-btn");
+	navButton.addEventListener("click", () => {
+		handler.onClick(project);
 	});
-	projectButton.dataset.id = project.id;
-	projectButton.append(icon, nameSpan);
+	navButton.append(icon, nameSpan);
 
-	projectElement.replaceChildren(projectButton);
-	return projectElement;
+	const deleteButton = document.createElement("button");
+	deleteButton.id = "delete-project-btn";
+	const deleteIcon = createIcon("delete");
+	deleteButton.append(deleteIcon);
+	deleteButton.addEventListener("click", () => {
+		handler.onDelete(project.id);
+	});
+
+	navItem.append(navButton, deleteButton);
+	return navItem;
 }
 
 export const renderProjects = renderList(
 	element.projectList,
-	createProjectElement,
+	createProjectNavItem,
 );
 
 export function toggleActiveNavItem(itemID) {
-	const activeNavItemButton = document.querySelector(".nav-item button.active");
-	activeNavItemButton?.classList.remove("active");
+	const activeNavItem = document.querySelector(".nav-item.active");
+	activeNavItem?.classList.remove("active");
 
-	const selectedNavItemButton = document.querySelector(
-		`.nav-item button[data-id="${itemID}"]`,
+	const selectedNavItem = document.querySelector(
+		`.nav-item[data-id="${itemID}"]`,
 	);
-	selectedNavItemButton?.classList.add("active");
+	selectedNavItem?.classList.add("active");
 }
 
 function blurOnEscapePress(event) {
@@ -52,9 +59,18 @@ element.projectInput.addEventListener("focus", () => {
 });
 
 export function updateProjectName(projectID, newProjectName) {
-	const projectNavItem = document.querySelector(
-		`.nav-item [data-id="${projectID}"]`,
+	const projectNavItem = element.projectList.querySelector(
+		`.nav-item[data-id="${projectID}"]`,
 	);
-	const projectTextSpan = projectNavItem.querySelector("span.text");
+	const projectTextSpan = projectNavItem.querySelector(
+		".project-btn span.text",
+	);
 	projectTextSpan.textContent = newProjectName;
+}
+
+export function removeProjectItem(projectID) {
+	const navItemToRemove = element.projectList.querySelector(
+		`[data-id="${projectID}"]`,
+	);
+	navItemToRemove?.remove();
 }

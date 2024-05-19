@@ -9,6 +9,10 @@ const inbox = todoManager.createProject("Inbox");
 element.inboxItem.dataset.id = inbox.id;
 
 const todoItemHandler = { onTodoComplete, onTodoDelete };
+const projectItemHandler = {
+	onClick: switchProject,
+	onDelete: onProjectDelete,
+};
 
 function switchProject(project, canModify = true) {
 	if (currentProject === project) return;
@@ -37,7 +41,7 @@ function projectSubmitHandler(event) {
 		(project) => project !== inbox,
 	);
 
-	sidebar.renderProjects(projectsWithoutInbox, switchProject);
+	sidebar.renderProjects(projectsWithoutInbox, projectItemHandler);
 	switchProject(newProject);
 }
 
@@ -66,6 +70,15 @@ function onTodoDelete(todoID) {
 	todoContent.removeTodoElement(todoID);
 }
 
+function onProjectDelete(projectID) {
+	todoManager.removeProject(projectID);
+	sidebar.removeProjectItem(projectID);
+
+	if (projectID === currentProject.id) {
+		switchProject(inbox, false);
+	}
+}
+
 function projectNameChangeHandler(event) {
 	const updatedName = event.target.value;
 	currentProject.name = updatedName;
@@ -75,7 +88,7 @@ function projectNameChangeHandler(event) {
 form.project.addEventListener("submit", projectSubmitHandler);
 todoContent.registerSubmitListener("addTodo", onSubmitTodoAdd);
 todoContent.registerSubmitListener("editTodo", onSubmitTodoEdit);
-element.inboxItem.addEventListener("click", () => {
+element.inboxButton.addEventListener("click", () => {
 	switchProject(inbox, false);
 });
 
