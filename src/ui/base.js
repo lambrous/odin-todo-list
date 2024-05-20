@@ -13,6 +13,8 @@ export const element = {
 	projectInput: form.project.querySelector("input"),
 	addTodoButton: document.querySelector("#add-todo-btn"),
 	confirmDialog: document.querySelector("dialog#confirm-dialog"),
+	completedContainer: document.querySelector("section.completed-section"),
+	completedList: document.querySelector("#completed-todos"),
 };
 
 export function renderList(container, createItem) {

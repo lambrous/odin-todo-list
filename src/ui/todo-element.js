@@ -1,6 +1,6 @@
 import { showTodoForm, submitHandler } from "./todo-content";
 import { form, createIcon } from "./base";
-import { getRelativeDate } from "../helpers/date";
+import { getRelativeDate } from "../utils/date";
 
 export function createTodoElement(todo, handler) {
 	const todoElement = document.createElement("li");
@@ -14,7 +14,7 @@ export function createTodoElement(todo, handler) {
 	todoTitle.classList.add("title");
 	todoTitle.textContent = todo.title;
 
-	const todoCompleteButton = createTodoCompleteButton(
+	const todoCompleteButton = createCheckbox(
 		todo.isComplete,
 		todo.id,
 		handler.onTodoComplete,
@@ -42,7 +42,7 @@ export function createTodoElement(todo, handler) {
 	return todoElement;
 }
 
-const createTodoCompleteButton = (isComplete, todoID, onClick = null) => {
+export const createCheckbox = (isComplete, todoID, onClick = null) => {
 	const todoCompleteButton = document.createElement("button");
 	const todoCompleteIcon = createIcon();
 	const toggleButton = (isComplete) => {

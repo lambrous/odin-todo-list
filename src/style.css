@@ -38,7 +38,7 @@
 
 body {
 	font-family: var(--font-base);
-	min-height: 100vh;
+	height: 100vh;
 	background-color: var(--color-background);
 	color: var(--color-text);
 	font-size: 0.875rem;
@@ -86,6 +86,7 @@ ul {
 	);
 	color: color-mix(in srgb, var(--color-text), var(--color-background) 10%);
 	padding: 1rem;
+	overflow-y: auto;
 
 	.logo {
 		font-size: 1.375rem;
@@ -250,7 +251,8 @@ ul {
 
 #content {
 	padding-block: 4rem;
-	overflow: hidden;
+	overflow-x: hidden;
+	overflow-y: auto;
 
 	.container {
 		width: min(900px, calc(100% - 4rem));
@@ -546,5 +548,45 @@ ul {
 			var(--color-background) 75%
 		);
 		color: var(--color-error);
+	}
+}
+
+section.completed-section {
+	margin-top: 3rem;
+	color: var(--color-text-02);
+
+	.heading {
+		display: flex;
+		align-items: center;
+		gap: 0.25em;
+		font-size: 0.875rem;
+		margin-bottom: 0.75rem;
+	}
+
+	.completed-item {
+		display: flex;
+		align-items: center;
+		padding-block: 0.25rem;
+	}
+
+	.completed-btn,
+	.completed-date {
+		color: var(--color-primary);
+	}
+
+	.completed-date {
+		width: 6ch;
+		margin-inline: 0.5em 0.75em;
+	}
+
+	.completed-item .title {
+		color: var(--color-text-03);
+	}
+
+	.completed-item .icon {
+		font-variation-settings: "FILL" 1;
+		&:hover {
+			font-variation-settings: "FILL" 1, "GRAD" 200;
+		}
 	}
 }

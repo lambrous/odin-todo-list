@@ -1,7 +1,14 @@
 import "./style.css";
 import TodoItem from "./todo-manager/todo-item";
 import todoManager from "./todo-manager/todo-list";
-import { form, element, todoContent, sidebar, confirmDialog } from "./ui/ui";
+import {
+	form,
+	element,
+	todoContent,
+	sidebar,
+	confirmDialog,
+	completedList,
+} from "./ui/ui";
 
 let currentProject = null;
 
@@ -24,7 +31,8 @@ function switchProject(project, canModify = true) {
 		currentProject.name,
 		canModify && projectNameChangeHandler,
 	);
-	todoContent.renderTodos(currentProject.todos, todoItemHandler);
+	todoContent.renderTodos(currentProject.incompleteTodos, todoItemHandler);
+	completedList.renderItems(currentProject.completedTodos, onUncheck);
 	sidebar.toggleActiveNavItem(currentProject.id);
 	todoContent.hideTodoForm();
 }
@@ -62,10 +70,11 @@ function onSubmitTodoEdit(formData, targetElement) {
 	targetElement.updateContent(todoItem, todoItemHandler);
 }
 
-function onTodoComplete(todoID, toggleButton) {
+function onTodoComplete(todoID) {
 	const todoItem = currentProject.getTodoByID(todoID);
-	todoItem.toggleCompletion();
-	toggleButton(todoItem.isComplete);
+	todoItem.markComplete();
+	todoContent.removeTodoElement(todoID);
+	completedList.addItem(todoItem, onUncheck);
 }
 
 function onTodoDelete(todoID) {
@@ -86,6 +95,13 @@ function projectNameChangeHandler(event) {
 	const updatedName = event.target.value;
 	currentProject.name = updatedName;
 	sidebar.updateProjectName(currentProject.id, currentProject.name);
+}
+
+function onUncheck(todoID) {
+	const todoItem = currentProject.getTodoByID(todoID);
+	todoItem.markIncomplete();
+	completedList.removeItem(todoID);
+	todoContent.renderTodos(currentProject.incompleteTodos, todoItemHandler);
 }
 
 form.project.addEventListener("submit", projectSubmitHandler);

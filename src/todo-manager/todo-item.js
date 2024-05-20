@@ -5,6 +5,7 @@ class TodoItem {
 	#id = nanoid(7);
 	#priority = 0;
 	#dueDate = null;
+	#completedDate = null;
 	static MIN_PRIORITY = 0;
 	static MAX_PRIORITY = 3;
 
@@ -22,6 +23,12 @@ class TodoItem {
 
 	markComplete() {
 		this.isComplete = true;
+		this.completedDate = new Date().toDateString();
+	}
+
+	markIncomplete() {
+		this.isComplete = false;
+		this.completedDate = null;
 	}
 
 	toggleCompletion() {
@@ -57,6 +64,14 @@ class TodoItem {
 	set dueDate(dateStr) {
 		const parseDate = new Date(dateStr);
 		this.#dueDate = isDateValid(parseDate) ? dateStr : null;
+	}
+
+	get completedDate() {
+		return this.#completedDate;
+	}
+
+	set completedDate(date) {
+		this.#completedDate = date;
 	}
 }
 

@@ -12,6 +12,14 @@ class TodoList {
 		return Array.from(this.#todos.values());
 	}
 
+	get completedTodos() {
+		return this.todos.filter((todo) => todo.isComplete);
+	}
+
+	get incompleteTodos() {
+		return this.todos.filter((todo) => !todo.isComplete);
+	}
+
 	get id() {
 		return this.#id;
 	}
