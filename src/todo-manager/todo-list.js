@@ -1,11 +1,13 @@
 import { nanoid } from "nanoid";
+import TodoItem from "./todo-item";
 
 class TodoList {
 	#todos = new Map();
-	#id = nanoid(5);
+	#id;
 
-	constructor(name) {
+	constructor(name, id) {
 		this.name = name;
+		this.id = id ?? `${nanoid(6)}`;
 	}
 
 	get todos() {
@@ -24,6 +26,10 @@ class TodoList {
 		return this.#id;
 	}
 
+	set id(value) {
+		this.#id = value;
+	}
+
 	getTodoByID(id) {
 		return this.#todos.get(id);
 	}
@@ -37,7 +43,7 @@ class TodoList {
 	}
 }
 
-class ProjectsManager {
+class TodoManager {
 	#projects = new Map();
 
 	get projects() {
@@ -48,10 +54,10 @@ class ProjectsManager {
 		return this.projects.map((project) => project.name);
 	}
 
-	createProject(name) {
+	createProject(name, id) {
 		const trimmedName = name.trim();
 		if (!trimmedName) return null;
-		const project = new TodoList(trimmedName);
+		const project = new TodoList(trimmedName, id);
 		this.#projects.set(project.id, project);
 		return project;
 	}
@@ -59,6 +65,41 @@ class ProjectsManager {
 	removeProject(id) {
 		this.#projects.delete(id);
 	}
+
+	getProjectByID(id) {
+		return this.#projects.get(id);
+	}
+
+	get jsonData() {
+		const projectsData = this.projects.map((project) => {
+			return {
+				name: project.name,
+				id: project.id,
+				todos: project.todos.map((todo) => {
+					return {
+						...todo,
+						id: todo.id,
+						priority: todo.priority,
+						dueDate: todo.dueDate,
+						completedDate: todo.completedDate,
+					};
+				}),
+			};
+		});
+		return JSON.stringify(projectsData);
+	}
+
+	loadTodos(json) {
+		const projects = JSON.parse(json);
+
+		for (const project of projects) {
+			const todoList = this.createProject(project.name, project.id);
+			for (const todo of project.todos) {
+				const todoItem = new TodoItem(todo);
+				todoList.addTodo(todoItem);
+			}
+		}
+	}
 }
 
-export default new ProjectsManager();
+export default new TodoManager();

@@ -2,23 +2,37 @@ import { nanoid } from "nanoid";
 import { isValid as isDateValid } from "date-fns";
 
 class TodoItem {
-	#id = nanoid(7);
-	#priority = 0;
-	#dueDate = null;
-	#completedDate = null;
+	#id;
+	#priority;
+	#dueDate;
+	#completedDate;
 	static MIN_PRIORITY = 0;
 	static MAX_PRIORITY = 3;
 
-	constructor({ title, description, dueDate, priority }) {
+	constructor({
+		title,
+		description,
+		dueDate,
+		priority,
+		id,
+		isComplete,
+		completedDate,
+	}) {
 		this.title = title || "New Todo";
 		this.description = description;
 		this.dueDate = dueDate;
 		this.priority = priority;
-		this.isComplete = false;
+		this.isComplete = isComplete ?? false;
+		this.id = id ?? nanoid(8);
+		this.completedDate = completedDate ?? null;
 	}
 
 	get id() {
 		return this.#id;
+	}
+
+	set id(value) {
+		this.#id = value;
 	}
 
 	markComplete() {

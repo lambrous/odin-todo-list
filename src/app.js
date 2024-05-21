@@ -11,9 +11,9 @@ import {
 } from "./ui/ui";
 
 let currentProject = null;
-
-const inbox = todoManager.createProject("Inbox");
-element.inboxItem.dataset.id = inbox.id;
+let inbox = null;
+const INBOX_ID = "Inbox";
+element.inboxItem.dataset.id = INBOX_ID;
 
 const todoItemHandler = { onTodoComplete, onTodoDelete };
 const projectItemHandler = {
@@ -23,6 +23,8 @@ const projectItemHandler = {
 		confirm: "Delete",
 	}),
 };
+const getProjectsWithoutInbox = () =>
+	todoManager.projects.filter((project) => project !== inbox);
 
 function switchProject(project, canModify = true) {
 	if (currentProject === project) return;
@@ -48,11 +50,7 @@ function projectSubmitHandler(event) {
 	event.target.querySelector("input").blur();
 	if (!newProject) return;
 
-	const projectsWithoutInbox = todoManager.projects.filter(
-		(project) => project !== inbox,
-	);
-
-	sidebar.renderProjects(projectsWithoutInbox, projectItemHandler);
+	sidebar.renderProjects(getProjectsWithoutInbox(), projectItemHandler);
 	switchProject(newProject);
 }
 
@@ -111,4 +109,30 @@ element.inboxButton.addEventListener("click", () => {
 	switchProject(inbox, false);
 });
 
-switchProject(inbox, false);
+window.addEventListener("beforeunload", () => {
+	localStorage.setItem("todos", todoManager.jsonData);
+	localStorage.setItem("current-project", currentProject.id);
+});
+
+window.addEventListener("load", () => {
+	const todosData = localStorage.getItem("todos");
+	if (todosData) todoManager.loadTodos(todosData);
+
+	inbox = todoManager.getProjectByID(INBOX_ID);
+	if (!inbox) {
+		inbox = todoManager.createProject(INBOX_ID, INBOX_ID);
+	}
+
+	sidebar.renderProjects(getProjectsWithoutInbox(), projectItemHandler);
+
+	const storedCurrentProjectID = localStorage.getItem("current-project");
+	const storedCurrentProject = todoManager.getProjectByID(
+		storedCurrentProjectID,
+	);
+
+	if (!storedCurrentProjectID || storedCurrentProjectID === inbox.id) {
+		switchProject(inbox, false);
+	} else {
+		switchProject(storedCurrentProject);
+	}
+});
