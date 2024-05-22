@@ -1,23 +1,18 @@
 import { nanoid } from "nanoid";
 import { isValid as isDateValid } from "date-fns";
 
-class TodoItem {
+export default class TodoItem {
 	#id;
 	#priority;
 	#dueDate;
-	#completedDate;
 	static MIN_PRIORITY = 0;
 	static MAX_PRIORITY = 3;
+	static #todos = new Map();
 
-	constructor({
-		title,
-		description,
-		dueDate,
-		priority,
-		id,
-		isComplete,
-		completedDate,
-	}) {
+	constructor(
+		{ title, description, dueDate, priority, id, isComplete, completedDate },
+		project = null,
+	) {
 		this.title = title || "New Todo";
 		this.description = description;
 		this.dueDate = dueDate;
@@ -25,6 +20,11 @@ class TodoItem {
 		this.isComplete = isComplete ?? false;
 		this.id = id ?? nanoid(8);
 		this.completedDate = completedDate ?? null;
+
+		if (project === null) this.project = { id: null };
+		else this.project = project;
+
+		TodoItem.#todos.set(this.id, this);
 	}
 
 	get id() {
@@ -80,13 +80,31 @@ class TodoItem {
 		this.#dueDate = isDateValid(parseDate) ? dateStr : null;
 	}
 
-	get completedDate() {
-		return this.#completedDate;
+	static get todos() {
+		return Array.from(TodoItem.#todos.values());
 	}
 
-	set completedDate(date) {
-		this.#completedDate = date;
+	static getTodoByID(id) {
+		return TodoItem.#todos.get(id);
+	}
+
+	static removeTodo(id) {
+		TodoItem.#todos.delete(id);
+	}
+
+	static getTodosForProject(projectID) {
+		return TodoItem.todos.filter((todo) => todo.project.id === projectID);
+	}
+
+	static getCompletedTodosForProject(projectID) {
+		return TodoItem.todos.filter(
+			(todo) => todo.project.id === projectID && todo.isComplete,
+		);
+	}
+
+	static getIncompleteTodosForProject(projectID) {
+		return TodoItem.todos.filter(
+			(todo) => todo.project.id === projectID && !todo.isComplete,
+		);
 	}
 }
-
-export default TodoItem;

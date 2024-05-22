@@ -1,6 +1,5 @@
 import "./style.css";
-import TodoItem from "./todo-manager/todo-item";
-import todoManager from "./todo-manager/todo-list";
+import { TodoItem, ProjectList, todoManager } from "./todo-manager/manager";
 import {
 	form,
 	element,
@@ -10,10 +9,12 @@ import {
 	completedList,
 } from "./ui/ui";
 
-let currentProject = null;
-let inbox = null;
-const INBOX_ID = "Inbox";
-element.inboxItem.dataset.id = INBOX_ID;
+const inbox = {
+	name: "Inbox",
+	id: null,
+};
+let currentProject = inbox;
+element.inboxItem.dataset.id = inbox.id;
 
 const todoItemHandler = { onTodoComplete, onTodoDelete };
 const projectItemHandler = {
@@ -23,18 +24,23 @@ const projectItemHandler = {
 		confirm: "Delete",
 	}),
 };
-const getProjectsWithoutInbox = () =>
-	todoManager.projects.filter((project) => project !== inbox);
 
-function switchProject(project, canModify = true) {
+function switchProject(project) {
 	if (currentProject === project) return;
-	currentProject = project;
+	currentProject = project || inbox;
+
 	todoContent.updateProjectName(
 		currentProject.name,
-		canModify && projectNameChangeHandler,
+		currentProject.id && projectNameChangeHandler,
 	);
-	todoContent.renderTodos(currentProject.incompleteTodos, todoItemHandler);
-	completedList.renderItems(currentProject.completedTodos, onUncheck);
+	todoContent.renderTodos(
+		TodoItem.getIncompleteTodosForProject(currentProject.id),
+		todoItemHandler,
+	);
+	completedList.renderItems(
+		TodoItem.getCompletedTodosForProject(currentProject.id),
+		onUncheck,
+	);
 	sidebar.toggleActiveNavItem(currentProject.id);
 	todoContent.hideTodoForm();
 }
@@ -44,48 +50,47 @@ function projectSubmitHandler(event) {
 
 	const projectData = new FormData(event.target);
 	const projectName = projectData.get("name");
-	const newProject = todoManager.createProject(projectName);
+	const newProject = new ProjectList(projectName);
 
 	event.target.reset();
 	event.target.querySelector("input").blur();
 	if (!newProject) return;
 
-	sidebar.renderProjects(getProjectsWithoutInbox(), projectItemHandler);
+	sidebar.renderProjects(ProjectList.projects, projectItemHandler);
 	switchProject(newProject);
 }
 
 function onSubmitTodoAdd(formData) {
-	const newTodo = new TodoItem(formData);
-	currentProject.addTodo(newTodo);
+	const newTodo = new TodoItem(formData, currentProject);
 	todoContent.addTodoElement(newTodo, todoItemHandler);
 }
 
 function onSubmitTodoEdit(formData, targetElement) {
-	const todoItem = currentProject.getTodoByID(targetElement.id);
+	const selectedTodo = TodoItem.getTodoByID(targetElement.id);
 	for (const key in formData) {
-		todoItem.updateProperty(key, formData[key]);
+		selectedTodo.updateProperty(key, formData[key]);
 	}
-	targetElement.updateContent(todoItem, todoItemHandler);
+	targetElement.updateContent(selectedTodo, todoItemHandler);
 }
 
 function onTodoComplete(todoID) {
-	const todoItem = currentProject.getTodoByID(todoID);
-	todoItem.markComplete();
+	const selectedTodo = TodoItem.getTodoByID(todoID);
+	selectedTodo.markComplete();
 	todoContent.removeTodoElement(todoID);
-	completedList.addItem(todoItem, onUncheck);
+	completedList.addItem(selectedTodo, onUncheck);
 }
 
 function onTodoDelete(todoID) {
-	currentProject.removeTodo(todoID);
+	TodoItem.removeTodo(todoID);
 	todoContent.removeTodoElement(todoID);
 }
 
 function onProjectDelete(projectID) {
-	todoManager.removeProject(projectID);
+	ProjectList.removeProject(projectID);
 	sidebar.removeProjectItem(projectID);
 
 	if (projectID === currentProject.id) {
-		switchProject(inbox, false);
+		switchProject();
 	}
 }
 
@@ -96,43 +101,35 @@ function projectNameChangeHandler(event) {
 }
 
 function onUncheck(todoID) {
-	const todoItem = currentProject.getTodoByID(todoID);
-	todoItem.markIncomplete();
+	const selectedTodo = TodoItem.getTodoByID(todoID);
+	selectedTodo.markIncomplete();
 	completedList.removeItem(todoID);
-	todoContent.renderTodos(currentProject.incompleteTodos, todoItemHandler);
+	todoContent.renderTodos(
+		TodoItem.getIncompleteTodosForProject(currentProject.id),
+		todoItemHandler,
+	);
 }
 
 form.project.addEventListener("submit", projectSubmitHandler);
 todoContent.registerSubmitListener("addTodo", onSubmitTodoAdd);
 todoContent.registerSubmitListener("editTodo", onSubmitTodoEdit);
 element.inboxButton.addEventListener("click", () => {
-	switchProject(inbox, false);
+	switchProject();
 });
 
 window.addEventListener("beforeunload", () => {
-	localStorage.setItem("todos", todoManager.jsonData);
-	localStorage.setItem("current-project", currentProject.id);
+	localStorage.setItem("todos", todoManager.getJsonData());
+	localStorage.setItem("session", currentProject.id);
 });
 
 window.addEventListener("load", () => {
 	const todosData = localStorage.getItem("todos");
 	if (todosData) todoManager.loadTodos(todosData);
 
-	inbox = todoManager.getProjectByID(INBOX_ID);
-	if (!inbox) {
-		inbox = todoManager.createProject(INBOX_ID, INBOX_ID);
-	}
+	sidebar.renderProjects(ProjectList.projects, projectItemHandler);
 
-	sidebar.renderProjects(getProjectsWithoutInbox(), projectItemHandler);
+	const sessionID = localStorage.getItem("session");
+	const sessionProject = ProjectList.getProjectByID(sessionID);
 
-	const storedCurrentProjectID = localStorage.getItem("current-project");
-	const storedCurrentProject = todoManager.getProjectByID(
-		storedCurrentProjectID,
-	);
-
-	if (!storedCurrentProjectID || storedCurrentProjectID === inbox.id) {
-		switchProject(inbox, false);
-	} else {
-		switchProject(storedCurrentProject);
-	}
+	switchProject(sessionID && sessionProject);
 });
