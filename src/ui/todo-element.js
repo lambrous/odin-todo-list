@@ -2,7 +2,11 @@ import { showTodoForm, submitHandler } from "./todo-content";
 import { form, createIcon } from "./base";
 import { getRelativeDate } from "../utils/date";
 
-export function createTodoElement(todo, handler) {
+export function createTodoElement(
+	todo,
+	handler,
+	{ showProject = false, showPriority = true, showDueDate = true } = {},
+) {
 	const todoElement = document.createElement("li");
 	todoElement.classList.add("todo-item");
 	todoElement.dataset.id = todo.id;
@@ -20,17 +24,31 @@ export function createTodoElement(todo, handler) {
 		handler.onTodoComplete,
 	);
 
-	const priorityElement = createPriorityElement(todo.priority);
-	headerContainer.append(todoCompleteButton, todoTitle, priorityElement);
+	headerContainer.append(todoCompleteButton, todoTitle);
+	if (showPriority) {
+		const priorityElement = createPriorityElement(todo.priority);
+		headerContainer.append(priorityElement);
+	}
 
 	const descriptionText = createDescriptionElement(todo.description);
 	const infoContainer = document.createElement("div");
 	infoContainer.classList.add("info-container");
 	infoContainer.append(headerContainer, descriptionText);
 
-	const dueDateElement = createDateElement(todo.dueDate);
+	const rightContainer = document.createElement("div");
+	rightContainer.classList.add("right-container");
+
+	if (showProject) {
+		const projectElement = createProjectElement(todo.project);
+		rightContainer.append(projectElement);
+	}
+	if (showDueDate) {
+		const dueDateElement = createDateElement(todo.dueDate);
+		rightContainer.append(dueDateElement);
+	}
+
 	const deleteButton = createDeleteButton(todo.id, handler.onTodoDelete);
-	todoElement.append(infoContainer, dueDateElement, deleteButton);
+	todoElement.append(infoContainer, rightContainer, deleteButton);
 
 	todoElement.addEventListener("click", (event) => {
 		if (event.target.closest("button")) return;
@@ -100,13 +118,12 @@ const createDescriptionElement = (description) => {
 
 const createDateElement = (dueDate) => {
 	if (!dueDate) return "";
-	const dateContainer = document.createElement("div");
-	dateContainer.classList.add("date-container");
-
-	const dateSpan = document.createElement("span");
-	dateSpan.classList.add("date");
 
 	const { daysDiff, relativeDateDescription } = getRelativeDate(dueDate);
+
+	const dateElement = document.createElement("div");
+	dateElement.classList.add("date");
+	dateElement.classList.toggle("due", daysDiff < 1);
 
 	const dateIcon = createIcon(`hourglass_${daysDiff < 0 ? "bottom" : "top"}`);
 
@@ -114,11 +131,9 @@ const createDateElement = (dueDate) => {
 	dateText.classList.add("text");
 	dateText.textContent = relativeDateDescription;
 
-	dateSpan.append(dateIcon, dateText);
-	dateContainer.append(dateSpan);
-	dateContainer.classList.toggle("due", daysDiff < 1);
+	dateElement.append(dateIcon, dateText);
 
-	return dateContainer;
+	return dateElement;
 };
 
 function createDeleteButton(todoID, onDelete) {
@@ -133,4 +148,18 @@ function createDeleteButton(todoID, onDelete) {
 	});
 
 	return deleteButton;
+}
+
+function createProjectElement(project) {
+	const projectElement = document.createElement("div");
+	projectElement.classList.add("project");
+
+	const projectIcon = createIcon(project?.name ? "tag" : "inbox");
+	const projectText = document.createElement("span");
+	projectText.classList.add("text");
+	projectText.textContent = project?.name ?? "Inbox";
+
+	projectElement.append(projectIcon, projectText);
+
+	return projectElement;
 }

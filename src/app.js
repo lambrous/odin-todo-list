@@ -16,7 +16,7 @@ const inbox = {
 let currentProject = inbox;
 element.inboxItem.dataset.id = inbox.id;
 
-const todoItemHandler = { onTodoComplete, onTodoDelete };
+const todoItemHandler = { onTodoComplete: completeTodo(), onTodoDelete };
 const projectItemHandler = {
 	onClick: switchProject,
 	onDelete: confirmDialog.addConfirmation(onProjectDelete, {
@@ -43,6 +43,7 @@ function switchProject(project) {
 	);
 	sidebar.toggleActiveNavItem(currentProject.id);
 	todoContent.hideTodoForm();
+	element.addTodoButton.classList.remove("hidden");
 }
 
 function projectSubmitHandler(event) {
@@ -73,11 +74,13 @@ function onSubmitTodoEdit(formData, targetElement) {
 	targetElement.updateContent(selectedTodo, todoItemHandler);
 }
 
-function onTodoComplete(todoID) {
-	const selectedTodo = TodoItem.getTodoByID(todoID);
-	selectedTodo.markComplete();
-	todoContent.removeTodoElement(todoID);
-	completedList.addItem(selectedTodo, onUncheck);
+function completeTodo(showComplete = true) {
+	return (todoID) => {
+		const selectedTodo = TodoItem.getTodoByID(todoID);
+		selectedTodo.markComplete();
+		todoContent.removeTodoElement(todoID);
+		if (showComplete) completedList.addItem(selectedTodo, onUncheck);
+	};
 }
 
 function onTodoDelete(todoID) {
@@ -110,11 +113,43 @@ function onUncheck(todoID) {
 	);
 }
 
+function showOtherList(list, props, options) {
+	currentProject = { id: props.id };
+	todoContent.updateProjectName(props.name);
+	todoContent.renderTodos(
+		list,
+		{
+			onTodoComplete: completeTodo(false),
+			onTodoDelete,
+		},
+		options,
+	);
+	sidebar.toggleActiveNavItem(currentProject.id);
+	todoContent.hideTodoForm();
+	element.addTodoButton.classList.add("hidden");
+	element.completedContainer.classList.add("hidden");
+}
+
 form.project.addEventListener("submit", projectSubmitHandler);
 todoContent.registerSubmitListener("addTodo", onSubmitTodoAdd);
 todoContent.registerSubmitListener("editTodo", onSubmitTodoEdit);
+
 element.inboxButton.addEventListener("click", () => {
 	switchProject();
+});
+element.todayNavButton.addEventListener("click", () => {
+	showOtherList(
+		TodoItem.incompleteTodosToday,
+		{ name: "Today", id: "today" },
+		{ showProject: true, showDueDate: false },
+	);
+});
+element.priorityNavButton.addEventListener("click", () => {
+	showOtherList(
+		TodoItem.incompleteHighPriorityTodos,
+		{ name: "High Priority", id: "priority" },
+		{ showProject: true, showPriority: false },
+	);
 });
 
 window.addEventListener("beforeunload", () => {
@@ -129,7 +164,8 @@ window.addEventListener("load", () => {
 	sidebar.renderProjects(ProjectList.projects, projectItemHandler);
 
 	const sessionID = localStorage.getItem("session");
-	const sessionProject = ProjectList.getProjectByID(sessionID);
-
-	switchProject(sessionID && sessionProject);
+	const sessionNavItemButton = element.sidebar.querySelector(
+		`.nav-item[data-id="${sessionID}"] .project-btn`,
+	);
+	sessionNavItemButton.click();
 });

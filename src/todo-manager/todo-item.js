@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import { isValid as isDateValid } from "date-fns";
+import { isValid as isDateValid, isToday } from "date-fns";
 
 export default class TodoItem {
 	#id;
@@ -106,5 +106,17 @@ export default class TodoItem {
 		return TodoItem.todos.filter(
 			(todo) => todo.project.id === projectID && !todo.isComplete,
 		);
+	}
+
+	static get incompleteTodosToday() {
+		return TodoItem.todos.filter(
+			(todo) => !todo.isComplete && isToday(todo.dueDate),
+		);
+	}
+
+	static get incompleteHighPriorityTodos() {
+		return TodoItem.todos.filter((todo) => {
+			return !todo.isComplete && todo.priority === TodoItem.MAX_PRIORITY;
+		});
 	}
 }

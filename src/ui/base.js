@@ -10,6 +10,8 @@ export const element = {
 	projectHeading: document.querySelector(".project-heading"),
 	inboxItem: document.querySelector("#inbox-nav-item"),
 	inboxButton: document.querySelector("#inbox-nav-item .project-btn"),
+	todayNavButton: document.querySelector("#today-nav-item .project-btn"),
+	priorityNavButton: document.querySelector("#priority-nav-item .project-btn"),
 	projectInput: form.project.querySelector("input"),
 	addTodoButton: document.querySelector("#add-todo-btn"),
 	confirmDialog: document.querySelector("dialog#confirm-dialog"),
@@ -18,10 +20,10 @@ export const element = {
 };
 
 export function renderList(container, createItem) {
-	return (list, handler = null) => {
+	return (list, handler, options) => {
 		container.replaceChildren();
 		for (const item of list) {
-			const itemElement = createItem(item, handler);
+			const itemElement = createItem(item, handler, options);
 			container.append(itemElement);
 		}
 	};

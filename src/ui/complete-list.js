@@ -28,7 +28,7 @@ export function createCompletedItem(todo, onUncheck) {
 
 export function addItem(todo, onUncheck) {
 	const completedItem = createCompletedItem(todo, onUncheck);
-	completedList.append(completedItem);
+	completedList.prepend(completedItem);
 	toggleContainerVisibility();
 }
 
