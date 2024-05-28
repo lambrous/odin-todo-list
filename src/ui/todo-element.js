@@ -1,6 +1,7 @@
 import { showTodoForm, submitHandler } from "./todo-content";
 import { form, createIcon } from "./base";
 import { getRelativeDate } from "../utils/date";
+import { createDropdownMenu } from "./dropdown-menu";
 
 export function createTodoElement(
 	todo,
@@ -47,14 +48,41 @@ export function createTodoElement(
 		rightContainer.append(dueDateElement);
 	}
 
-	const deleteButton = createDeleteButton(todo.id, handler.onTodoDelete);
-	todoElement.append(infoContainer, rightContainer, deleteButton);
-
-	todoElement.addEventListener("click", (event) => {
-		if (event.target.closest("button")) return;
+	const editClickHandler = () => {
 		showTodoForm(todoElement, todo);
 		form.todo.removeEventListener("submit", submitHandler.addTodo);
 		form.todo.addEventListener("submit", submitHandler.editTodo);
+	};
+
+	const dropdownMenu = createDropdownMenu([
+		{
+			text: "Edit",
+			icon: "edit",
+			handler: editClickHandler,
+		},
+		{
+			text: "Delete",
+			icon: "delete",
+			handler() {
+				handler.onTodoDelete(todo.id);
+			},
+		},
+	]);
+
+	todoElement.append(
+		infoContainer,
+		rightContainer,
+		dropdownMenu.button,
+		dropdownMenu.menu,
+	);
+
+	todoElement.addEventListener("click", (event) => {
+		if (
+			event.target.closest("button") ||
+			dropdownMenu.menu.contains(event.target)
+		)
+			return;
+		editClickHandler(event);
 	});
 
 	return todoElement;
@@ -135,20 +163,6 @@ const createDateElement = (dueDate) => {
 
 	return dateElement;
 };
-
-function createDeleteButton(todoID, onDelete) {
-	const deleteButton = document.createElement("button");
-	deleteButton.id = "delete-todo-btn";
-
-	const deleteIcon = createIcon("delete");
-	deleteButton.append(deleteIcon);
-
-	deleteButton.addEventListener("click", () => {
-		onDelete(todoID);
-	});
-
-	return deleteButton;
-}
 
 function createProjectElement(project) {
 	const projectElement = document.createElement("div");

@@ -1,4 +1,5 @@
 import { element, renderList, createIcon } from "./base";
+import { createDropdownMenu } from "./dropdown-menu";
 
 export function createProjectNavItem(project, handler) {
 	const navItem = document.createElement("li");
@@ -18,15 +19,25 @@ export function createProjectNavItem(project, handler) {
 	});
 	navButton.append(icon, nameSpan);
 
-	const deleteButton = document.createElement("button");
-	deleteButton.id = "delete-project-btn";
-	const deleteIcon = createIcon("delete");
-	deleteButton.append(deleteIcon);
-	deleteButton.addEventListener("click", () => {
-		handler.onDelete(project.id);
-	});
+	const dropdownMenu = createDropdownMenu([
+		{
+			text: "Rename",
+			icon: "edit",
+			handler() {
+				handler.onClick(project);
+				element.projectHeading.querySelector("input").focus();
+			},
+		},
+		{
+			text: "Delete",
+			icon: "delete",
+			handler() {
+				handler.onDelete(project.id);
+			},
+		},
+	]);
 
-	navItem.append(navButton, deleteButton);
+	navItem.append(navButton, dropdownMenu.button, dropdownMenu.menu);
 	return navItem;
 }
 
