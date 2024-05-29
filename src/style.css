@@ -6,7 +6,7 @@
 	--color-primary: #874b6d;
 	--color-secondary: #715764;
 	--color-accent: #80543c;
-	--color-error: #ba1a1a;
+	--color-error: #f20d20;
 
 	--color-text-02: color-mix(
 		in srgb,
@@ -19,9 +19,29 @@
 		var(--color-background) 40%
 	);
 
+	--color-bg-02: color-mix(
+		in srgb,
+		var(--color-secondary) 3%,
+		var(--color-background)
+	);
+
 	--color-primary-l5: color-mix(in srgb, var(--color-primary), transparent 90%);
 	--font-base: "Inter", system-ui, sans-serif;
 	--shadow: rgba(16, 30, 54, 0.15) 0px 5px 15px 0px;
+
+	&[data-theme="dark"] {
+		--color-text: #eddfe4;
+		--color-background: #2e1a21;
+		--color-primary: #fbb0d7;
+		--color-secondary: #dfbecc;
+		--color-accent: #f3ba9c;
+		--color-error: #f75f6c;
+		--color-menu: color-mix(
+			in srgb,
+			var(--color-text) 8%,
+			var(--color-background)
+		);
+	}
 }
 
 *,
@@ -70,6 +90,11 @@ ul {
 	list-style: none;
 }
 
+input,
+textarea {
+	color: inherit;
+}
+
 .hidden {
 	display: none !important;
 }
@@ -80,20 +105,29 @@ ul {
 }
 
 #sidebar {
-	background-color: color-mix(
-		in srgb,
-		var(--color-secondary) 3%,
-		var(--color-background)
-	);
+	background-color: var(--color-bg-02);
 	color: color-mix(in srgb, var(--color-text), var(--color-background) 10%);
 	padding: 1rem;
-	overflow-y: auto;
 	width: 16rem;
+	position: relative;
+
+	.sidebar-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 1rem;
+		position: relative;
+	}
+
+	.sidebar-header .dropdown-menu {
+		top: -0.5rem;
+		right: 1rem;
+		transform: translate(50%, 50%);
+	}
 
 	.logo {
 		font-size: 1.375rem;
 		font-weight: 600;
-		margin-bottom: 1rem;
 		letter-spacing: 0.05em;
 		display: flex;
 		align-items: center;
@@ -124,6 +158,7 @@ ul {
 		border-radius: 0.25rem;
 		display: flex;
 		align-items: center;
+		line-height: normal;
 
 		.text {
 			width: calc(100% - 3rem);
@@ -187,7 +222,6 @@ ul {
 #project-form {
 	input {
 		padding-block: 0.25rem;
-		color: inherit;
 	}
 
 	input:not(:focus) {
@@ -198,7 +232,7 @@ ul {
 		border: 0;
 		text-align: center;
 		border: 1px solid;
-		border-color: color-mix(in srgb, var(--color-primary), transparent 60%);
+		border-color: color-mix(in srgb, var(--color-primary), transparent 75%);
 		border-radius: 0.25rem;
 		width: 100%;
 		padding-block: 0.5rem;
@@ -289,7 +323,7 @@ ul {
 		}
 
 		&:hover .text {
-			color: initial;
+			color: var(--color-text);
 			text-decoration: underline 2px;
 			text-underline-offset: 0.25rem;
 		}
@@ -363,11 +397,7 @@ ul {
 
 		&.priority-3 {
 			color: var(--color-background);
-			background-color: color-mix(
-				in srgb,
-				var(--color-error),
-				var(--color-background) 30%
-			);
+			background-color: var(--color-error);
 		}
 
 		&.priority-2 {
@@ -418,6 +448,7 @@ ul {
 
 		&.date {
 			font-size: 0.875rem;
+			color: var(--color-text-02);
 		}
 
 		&.due {
@@ -436,10 +467,6 @@ ul {
 
 	.menu-btn {
 		margin-left: 0.5rem;
-
-		&:hover {
-			background-color: var(--color-primary-l5);
-		}
 	}
 
 	.dropdown-menu {
@@ -500,6 +527,12 @@ ul {
 		font-size: 0.75rem;
 	}
 
+	@media (prefers-color-scheme: dark) {
+		#todo-due-date {
+			color-scheme: dark;
+		}
+	}
+
 	button[type="submit"] {
 		background-color: var(--color-primary);
 		color: var(--color-background);
@@ -517,6 +550,8 @@ ul {
 }
 
 #confirm-dialog {
+	background-color: var(--color-bg-02);
+	color: var(--color-text);
 	margin: auto;
 	border: 0;
 	padding: 1.5rem;
@@ -539,20 +574,12 @@ ul {
 		flex: 1;
 		padding: 0.625em 2em;
 		border-radius: 0.25rem;
-		background-color: color-mix(
-			in srgb,
-			var(--color-text),
-			var(--color-background) 80%
-		);
+		background-color: color-mix(in srgb, var(--color-text), transparent 85%);
 		color: var(--color-text-02);
 	}
 
 	#confirm-btn {
-		background-color: color-mix(
-			in srgb,
-			var(--color-error),
-			var(--color-background) 75%
-		);
+		background-color: color-mix(in srgb, var(--color-error), transparent 75%);
 		color: var(--color-error);
 	}
 }
@@ -586,7 +613,7 @@ section.completed-section {
 	}
 
 	.completed-item .title {
-		color: var(--color-text-03);
+		color: var(--color-text-02);
 	}
 
 	.completed-item .icon {
@@ -616,6 +643,7 @@ section.completed-section {
 	border-radius: 0.25rem;
 	position: absolute;
 	z-index: 99;
+	user-select: none;
 
 	li {
 		padding: 0.5em 1em;
@@ -632,5 +660,32 @@ section.completed-section {
 
 	.icon {
 		color: var(--color-text-02);
+		font-size: 1.5em;
+	}
+}
+
+#theme-selector {
+	font-size: 1.125rem;
+	background-color: color-mix(in srgb, var(--color-text), transparent 95%);
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	aspect-ratio: 1 / 1;
+	padding: 0.25em;
+	/* position: absolute;
+	top: 1rem;
+	right: 1rem; */
+	color: var(--color-text-03);
+
+	.icon {
+		font-size: inherit;
+		margin: 0;
+	}
+
+	&.active,
+	&:hover {
+		background-color: var(--color-primary-l5);
+		color: var(--color-text);
 	}
 }

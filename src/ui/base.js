@@ -17,6 +17,7 @@ export const element = {
 	confirmDialog: document.querySelector("dialog#confirm-dialog"),
 	completedContainer: document.querySelector("section.completed-section"),
 	completedList: document.querySelector("#completed-todos"),
+	themeSelector: document.querySelector("#theme-selector"),
 };
 
 export function renderList(container, createItem) {
