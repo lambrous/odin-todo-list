@@ -198,8 +198,9 @@ textarea {
 		visibility: visible;
 	}
 
-	.dropdown-menu {
-		right: 0;
+	.nav-item .dropdown-menu {
+		right: 1rem;
+		transform: translateX(50%);
 	}
 }
 
@@ -228,7 +229,6 @@ textarea {
 		margin-inline: auto;
 		cursor: pointer;
 		background-color: inherit;
-		color: var(--color-text-02);
 		border: 0;
 		text-align: center;
 		border: 1px solid;
@@ -248,7 +248,8 @@ textarea {
 	}
 
 	input::placeholder {
-		color: inherit;
+		color: var(--color-text-02);
+		opacity: 1;
 	}
 
 	input:focus {
@@ -258,6 +259,7 @@ textarea {
 		border-bottom: 1px solid;
 		border-color: var(--color-text-03);
 		padding-bottom: 0.3125rem;
+		width: 100%;
 	}
 
 	input:focus::placeholder {
@@ -477,10 +479,14 @@ textarea {
 
 #todo-form {
 	border: 1px solid;
-	border-color: color-mix(in srgb, var(--color-secondary), transparent);
+	border-color: color-mix(in srgb, var(--color-text), transparent 80%);
 	padding: 1rem 0.5rem;
 	border-radius: 0.5rem;
 	margin-block: 1rem;
+
+	&:focus-within {
+		border-color: color-mix(in srgb, var(--color-secondary), transparent);
+	}
 
 	input,
 	textarea,
@@ -533,11 +539,23 @@ textarea {
 		}
 	}
 
-	button[type="submit"] {
-		background-color: var(--color-primary);
-		color: var(--color-background);
+	button {
 		padding: 0.5em 1.25em;
 		border-radius: 0.25rem;
+		background-color: color-mix(
+			in srgb,
+			var(--color-text),
+			var(--color-background) 85%
+		);
+		margin-left: 0.5rem;
+	}
+
+	button[type="submit"] {
+		background-color: color-mix(
+			in hsl,
+			var(--color-primary) 40%,
+			var(--color-background)
+		);
 	}
 
 	&:invalid button[type="submit"] {
@@ -546,6 +564,7 @@ textarea {
 			var(--color-primary),
 			var(--color-background) 60%
 		);
+		color: var(--color-text-02);
 	}
 }
 
@@ -665,7 +684,7 @@ section.completed-section {
 }
 
 #theme-selector {
-	font-size: 1.125rem;
+	font-size: 1.25rem;
 	background-color: color-mix(in srgb, var(--color-text), transparent 95%);
 	border-radius: 50%;
 	display: flex;

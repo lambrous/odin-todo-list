@@ -2,13 +2,14 @@ import { element, form, renderList } from "./base";
 import { createTodoElement } from "./todo-element";
 
 let currentTodoElement = null;
+
 export const getCurrentTodoElement = () => currentTodoElement;
 
 export function showTodoForm(elementToReplace = null, todo = null) {
 	currentTodoElement?.classList.remove("hidden");
 	form.todo.reset();
 
-	if (elementToReplace === null) {
+	if (!elementToReplace) {
 		element.todoList.append(form.todo);
 	} else {
 		currentTodoElement = elementToReplace;
@@ -23,32 +24,26 @@ export function showTodoForm(elementToReplace = null, todo = null) {
 
 	form.todo.querySelector("input").focus();
 	form.todo.addEventListener("keydown", handleEscapePress);
-	document.addEventListener("click", handleClickOutsideForm);
 }
 
 export function hideTodoForm() {
 	form.todo.removeEventListener("keydown", handleEscapePress);
-	document.removeEventListener("click", handleClickOutsideForm);
 	form.todo.hidden = true;
 	currentTodoElement?.classList.remove("hidden");
 }
 
 function fillForm(todo) {
-	const input = {
+	const inputFields = {
 		title: form.todo.querySelector("#todo-title"),
 		description: form.todo.querySelector("#todo-description"),
 		dueDate: form.todo.querySelector("#todo-due-date"),
 		priority: form.todo.querySelector("#todo-priority"),
 	};
 
-	for (const key in input) {
-		if (
-			todo[key] !== null ||
-			todo[key] !== undefined ||
-			todo[key] !== "" ||
-			key in todo
-		)
-			input[key].value = todo[key];
+	for (const key in inputFields) {
+		if (todo[key] !== undefined && todo[key] !== null && todo[key] !== "") {
+			inputFields[key].value = todo[key];
+		}
 	}
 }
 
@@ -60,18 +55,16 @@ export const submitHandler = {
 export function registerSubmitListener(action, callback) {
 	submitHandler[action] = (event) => {
 		event.preventDefault();
-
 		const formData = new FormData(event.target);
 		const todoFormData = Object.fromEntries(formData);
 		const selectedElement = getCurrentTodoElement();
-		const element = elementUpdater(selectedElement);
-		callback(todoFormData, element);
-
+		const elementData = getElementData(selectedElement);
+		callback(todoFormData, elementData);
 		hideTodoForm();
 	};
 }
 
-function elementUpdater(element) {
+function getElementData(element) {
 	if (!element || element === element.addTodoButton) return null;
 	return {
 		id: element.dataset.id,
@@ -98,25 +91,7 @@ function handleEscapePress(event) {
 	if (event.key === "Escape") hideTodoForm();
 }
 
-const handleClickOutsideForm = (event) => {
-	const rect = form.todo.getBoundingClientRect();
-	if (
-		event.clientY < rect.top ||
-		event.clientY > rect.bottom ||
-		event.clientX < rect.left ||
-		event.clientX > rect.right
-	) {
-		hideTodoForm();
-	}
-};
-
 export const renderTodos = renderList(element.todoList, createTodoElement);
-
-element.addTodoButton.addEventListener("click", () => {
-	showTodoForm(element.addTodoButton);
-	form.todo.removeEventListener("submit", submitHandler.editTodo);
-	form.todo.addEventListener("submit", submitHandler.addTodo);
-});
 
 export const updateProjectName = (name, handler = null) => {
 	if (!handler) {
@@ -129,7 +104,20 @@ export const updateProjectName = (name, handler = null) => {
 	projectNameInput.value = name;
 	projectNameInput.addEventListener("blur", handler);
 	projectNameInput.addEventListener("keydown", (event) => {
-		if (event.key === "Enter" || event.key === "Escape")
+		if (event.key === "Enter" || event.key === "Escape") {
 			projectNameInput.blur();
+		}
 	});
 };
+
+const todoCancelButton = form.todo.querySelector(".cancel-btn");
+
+todoCancelButton.addEventListener("click", () => {
+	hideTodoForm();
+});
+
+element.addTodoButton.addEventListener("click", () => {
+	showTodoForm(element.addTodoButton);
+	form.todo.removeEventListener("submit", submitHandler.editTodo);
+	form.todo.addEventListener("submit", submitHandler.addTodo);
+});
