@@ -1,4 +1,4 @@
-import { element, form, renderList } from "./base";
+import { createIcon, element, form, renderList } from "./base";
 import { createTodoElement } from "./todo-element";
 
 let currentTodoElement = null;
@@ -93,14 +93,16 @@ function handleEscapePress(event) {
 
 export const renderTodos = renderList(element.todoList, createTodoElement);
 
-export const updateProjectName = (name, handler = null) => {
+export const updateProjectName = (name, handler = null, icon = "tag") => {
+	const headingIcon = createIcon(icon);
+
 	if (!handler) {
-		element.projectHeading.replaceChildren(name);
+		element.projectHeading.replaceChildren(headingIcon, name);
 		return;
 	}
 
 	const projectNameInput = document.createElement("input");
-	element.projectHeading.replaceChildren(projectNameInput);
+	element.projectHeading.replaceChildren(headingIcon, projectNameInput);
 	projectNameInput.value = name;
 	projectNameInput.addEventListener("blur", handler);
 	projectNameInput.addEventListener("keydown", (event) => {

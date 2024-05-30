@@ -32,6 +32,7 @@ function switchProject(project) {
 	todoContent.updateProjectName(
 		currentProject.name,
 		currentProject.id && projectNameChangeHandler,
+		currentProject.id ? "tag" : "inbox",
 	);
 	todoContent.renderTodos(
 		TodoItem.getIncompleteTodosForProject(currentProject.id),
@@ -115,7 +116,7 @@ function onUncheck(todoID) {
 
 function showOtherList(list, props, options) {
 	currentProject = { id: props.id };
-	todoContent.updateProjectName(props.name);
+	todoContent.updateProjectName(props.name, null, props.icon);
 	todoContent.renderTodos(
 		list,
 		{
@@ -140,14 +141,14 @@ element.inboxButton.addEventListener("click", () => {
 element.todayNavButton.addEventListener("click", () => {
 	showOtherList(
 		TodoItem.incompleteTodosToday,
-		{ name: "Today", id: "today" },
+		{ name: "Today", id: "today", icon: "today" },
 		{ showProject: true, showDueDate: false },
 	);
 });
 element.priorityNavButton.addEventListener("click", () => {
 	showOtherList(
 		TodoItem.incompleteHighPriorityTodos,
-		{ name: "High Priority", id: "priority" },
+		{ name: "High Priority", id: "priority", icon: "flag" },
 		{ showProject: true, showPriority: false },
 	);
 });
