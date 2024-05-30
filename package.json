@@ -16,12 +16,14 @@
 	"author": "Lambrous <lambrous@outlook.ph>",
 	"license": "ISC",
 	"devDependencies": {
+		"clean-webpack-plugin": "^4.0.0",
 		"css-loader": "^7.1.1",
 		"gh-pages": "^6.1.1",
 		"html-webpack-plugin": "^5.6.0",
 		"mini-css-extract-plugin": "^2.9.0",
 		"style-loader": "^4.0.0",
 		"webpack": "^5.91.0",
+		"webpack-bundle-analyzer": "^4.10.2",
 		"webpack-cli": "^5.1.4",
 		"webpack-dev-server": "^5.0.4"
 	},
