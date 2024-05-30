@@ -97,9 +97,9 @@ export default class TodoItem {
 	}
 
 	static getCompletedTodosForProject(projectID) {
-		return TodoItem.todos.filter(
-			(todo) => todo.project.id === projectID && todo.isComplete,
-		);
+		return TodoItem.todos
+			.filter((todo) => todo.project.id === projectID && todo.isComplete)
+			.sort((a, b) => new Date(b.completedDate) - new Date(a.completedDate));
 	}
 
 	static getIncompleteTodosForProject(projectID) {
@@ -121,8 +121,8 @@ export default class TodoItem {
 	}
 
 	static get overdueTodos() {
-		return TodoItem.todos.filter(
-			(todo) => !todo.isComplete && isPast(endOfDay(todo.dueDate)),
-		);
+		return TodoItem.todos
+			.filter((todo) => !todo.isComplete && isPast(endOfDay(todo.dueDate)))
+			.sort((a, b) => new Date(b.dueDate) - new Date(a.dueDate));
 	}
 }
