@@ -143,9 +143,9 @@ element.inboxButton.addEventListener("click", () => {
 
 element.todayNavButton.addEventListener("click", () => {
 	showOtherList(
-		TodoItem.incompleteTodosToday,
+		TodoItem.incompleteTodosToday.concat(TodoItem.overdueTodos),
 		{ name: "Today", id: "today", icon: "today" },
-		{ showProject: true, showDueDate: false },
+		{ showProject: true, showOverdue: true },
 	);
 });
 

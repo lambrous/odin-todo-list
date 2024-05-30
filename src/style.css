@@ -4,8 +4,8 @@
 	--color-text: #160811;
 	--color-background: #fff8f8;
 	--color-primary: #874b6d;
-	--color-secondary: #715764;
-	--color-accent: #80543c;
+	--color-secondary: #8f443d;
+	--color-accent: #45f0a5;
 	--color-error: #f20d20;
 
 	--color-text-02: color-mix(
@@ -31,10 +31,10 @@
 
 	&[data-theme="dark"] {
 		--color-text: #eddfe4;
-		--color-background: #2e1a21;
+		--color-background: #2f1e27;
 		--color-primary: #fbb0d7;
-		--color-secondary: #dfbecc;
-		--color-accent: #f3ba9c;
+		--color-secondary: #d19994;
+		--color-accent: #0b8e55;
 		--color-error: #f75f6c;
 		--color-menu: color-mix(
 			in srgb,
@@ -424,16 +424,16 @@ textarea {
 		margin-left: 0.75rem;
 
 		&.priority-3 {
-			color: var(--color-background);
-			background-color: var(--color-error);
+			color: color-mix(in srgb, var(--color-text), transparent 20%);
+			background-color: var(--color-accent);
 		}
 
 		&.priority-2 {
-			color: var(--color-secondary);
+			color: color-mix(in srgb, var(--color-primary), var(--color-text-03) 80%);
 			background-color: color-mix(
 				in srgb,
-				var(--color-secondary),
-				transparent 90%
+				var(--color-primary),
+				transparent 95%
 			);
 		}
 
@@ -448,31 +448,19 @@ textarea {
 	}
 
 	.right-container {
-		color: var(--color-secondary);
 		margin-left: 1rem;
 		display: flex;
 		align-items: center;
 		justify-content: end;
-		gap: 1rem;
+		gap: 0.75em;
 		margin-left: auto;
+		padding-left: 1rem;
 	}
 
 	.right-container > div {
 		display: flex;
 		align-items: center;
 		gap: 0.2em;
-
-		&.project {
-			font-size: 0.75rem;
-			background-color: color-mix(
-				in srgb,
-				var(--color-accent),
-				transparent 90%
-			);
-			color: var(--color-accent);
-			padding: 0.25em 0.75em;
-			border-radius: 99rem;
-		}
 
 		&.date {
 			font-size: 0.875rem;
@@ -490,6 +478,20 @@ textarea {
 
 		.text {
 			width: max-content;
+		}
+
+		&.project,
+		&.overdue {
+			--color-tag: var(--color-secondary);
+			font-size: 0.75rem;
+			background-color: color-mix(in srgb, var(--color-tag), transparent 90%);
+			color: var(--color-tag);
+			padding: 0.25em 0.5em;
+			border-radius: 99rem;
+		}
+
+		&.overdue {
+			--color-tag: var(--color-error);
 		}
 	}
 
@@ -511,7 +513,7 @@ textarea {
 	margin-block: 1rem;
 
 	&:focus-within {
-		border-color: color-mix(in srgb, var(--color-secondary), transparent);
+		border-color: color-mix(in srgb, var(--color-text), transparent);
 	}
 
 	input,
@@ -551,9 +553,9 @@ textarea {
 
 	#todo-due-date,
 	#todo-priority {
-		color: var(--color-secondary);
+		color: var(--color-text-02);
 		border: 1px solid;
-		border-color: color-mix(in srgb, var(--color-secondary), transparent);
+		border-color: color-mix(in srgb, var(--color-text-03), transparent);
 		border-radius: 0.25rem;
 		padding: 0.25rem;
 		font-size: 0.75rem;

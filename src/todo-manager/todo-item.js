@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import { isValid as isDateValid, isToday } from "date-fns";
+import { endOfDay, isValid as isDateValid, isPast, isToday } from "date-fns";
 
 export default class TodoItem {
 	#id;
@@ -115,8 +115,14 @@ export default class TodoItem {
 	}
 
 	static get incompleteHighPriorityTodos() {
-		return TodoItem.todos.filter((todo) => {
-			return !todo.isComplete && todo.priority === TodoItem.MAX_PRIORITY;
-		});
+		return TodoItem.todos.filter(
+			(todo) => !todo.isComplete && todo.priority === TodoItem.MAX_PRIORITY,
+		);
+	}
+
+	static get overdueTodos() {
+		return TodoItem.todos.filter(
+			(todo) => !todo.isComplete && isPast(endOfDay(todo.dueDate)),
+		);
 	}
 }

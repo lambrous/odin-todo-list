@@ -13,7 +13,9 @@ export function createCompletedItem(todo, onUncheck) {
 	const checkbox = createCheckbox(todo.isComplete, todo.id, onUncheck);
 	checkbox.classList.add("completed-btn");
 
-	const { relativeDateDescription } = getRelativeDate(todo.completedDate, true);
+	const { relativeDateDescription } = getRelativeDate(todo.completedDate, {
+		onlyDate: true,
+	});
 	const completedDateSpan = document.createElement("span");
 	completedDateSpan.classList.add("completed-date");
 	completedDateSpan.textContent = relativeDateDescription;

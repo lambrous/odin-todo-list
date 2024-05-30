@@ -6,7 +6,12 @@ import { createDropdownMenu } from "./dropdown-menu";
 export function createTodoElement(
 	todo,
 	handler,
-	{ showProject = false, showPriority = true, showDueDate = true } = {},
+	{
+		showProject = false,
+		showPriority = true,
+		showDueDate = true,
+		showOverdue = false,
+	} = {},
 ) {
 	const todoElement = document.createElement("li");
 	todoElement.classList.add("todo-item");
@@ -43,8 +48,8 @@ export function createTodoElement(
 		const projectElement = createProjectElement(todo.project);
 		rightContainer.append(projectElement);
 	}
-	if (showDueDate) {
-		const dueDateElement = createDateElement(todo.dueDate);
+	if (showDueDate || showOverdue) {
+		const dueDateElement = createDateElement(todo.dueDate, showOverdue);
 		rightContainer.append(dueDateElement);
 	}
 
@@ -144,14 +149,18 @@ const createDescriptionElement = (description) => {
 	return descriptionText;
 };
 
-const createDateElement = (dueDate) => {
+const createDateElement = (dueDate, showOverdue = false) => {
 	if (!dueDate) return "";
 
-	const { daysDiff, relativeDateDescription } = getRelativeDate(dueDate);
+	const { daysDiff, relativeDateDescription } = getRelativeDate(dueDate, {
+		showOverdue,
+	});
+	if (daysDiff > -1 && showOverdue) return "";
 
 	const dateElement = document.createElement("div");
 	dateElement.classList.add("date");
 	dateElement.classList.toggle("due", daysDiff < 1);
+	dateElement.classList.toggle("overdue", showOverdue);
 
 	const dateIcon = createIcon(`hourglass_${daysDiff < 0 ? "bottom" : "top"}`);
 
@@ -168,10 +177,10 @@ function createProjectElement(project) {
 	const projectElement = document.createElement("div");
 	projectElement.classList.add("project");
 
-	const projectIcon = createIcon(project?.name ? "tag" : "inbox");
+	const projectIcon = createIcon(project.id ? "tag" : "inbox");
 	const projectText = document.createElement("span");
 	projectText.classList.add("text");
-	projectText.textContent = project?.name ?? "Inbox";
+	projectText.textContent = project.name ?? "Inbox";
 
 	projectElement.append(projectIcon, projectText);
 
