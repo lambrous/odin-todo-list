@@ -337,6 +337,24 @@ textarea {
 			text-decoration: underline 2px;
 			text-underline-offset: 0.25rem;
 		}
+
+		.keys {
+			font-size: 0.75rem;
+			color: var(--color-text-03);
+
+			code {
+				padding: 0.2em 0.4em;
+				margin: 0;
+				font-size: 85%;
+				white-space: break-spaces;
+				background-color: color-mix(
+					in srgb,
+					var(--color-text-02),
+					transparent 85%
+				);
+				border-radius: 0.375rem;
+			}
+		}
 	}
 }
 

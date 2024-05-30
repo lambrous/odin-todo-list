@@ -8,6 +8,7 @@ import {
 	confirmDialog,
 	completedList,
 } from "./ui/ui";
+import "./keybinds.js";
 
 const inbox = {
 	name: "Inbox",
@@ -129,6 +130,7 @@ function showOtherList(list, props, options) {
 	todoContent.hideTodoForm();
 	element.addTodoButton.classList.add("hidden");
 	element.completedContainer.classList.add("hidden");
+	element.addTodoButton.disabled = true;
 }
 
 form.project.addEventListener("submit", projectSubmitHandler);
@@ -138,6 +140,7 @@ todoContent.registerSubmitListener("editTodo", onSubmitTodoEdit);
 element.inboxButton.addEventListener("click", () => {
 	switchProject();
 });
+
 element.todayNavButton.addEventListener("click", () => {
 	showOtherList(
 		TodoItem.incompleteTodosToday,
@@ -145,6 +148,7 @@ element.todayNavButton.addEventListener("click", () => {
 		{ showProject: true, showDueDate: false },
 	);
 });
+
 element.priorityNavButton.addEventListener("click", () => {
 	showOtherList(
 		TodoItem.incompleteHighPriorityTodos,

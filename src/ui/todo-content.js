@@ -24,12 +24,14 @@ export function showTodoForm(elementToReplace = null, todo = null) {
 
 	form.todo.querySelector("input").focus();
 	form.todo.addEventListener("keydown", handleEscapePress);
+	element.addTodoButton.disabled = true;
 }
 
 export function hideTodoForm() {
 	form.todo.removeEventListener("keydown", handleEscapePress);
 	form.todo.hidden = true;
 	currentTodoElement?.classList.remove("hidden");
+	element.addTodoButton.disabled = false;
 }
 
 function fillForm(todo) {
