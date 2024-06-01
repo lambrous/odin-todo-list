@@ -414,14 +414,24 @@ textarea {
 		-webkit-box-orient: vertical;
 	}
 
-	.priority {
+	.project,
+	.overdue,
+	.priority,
+	.date {
+		--color-tag: var(--color-secondary);
 		display: flex;
 		align-items: center;
 		gap: 0.2em;
-		font-size: 0.625rem;
+		font-size: 0.75rem;
+		background-color: color-mix(in srgb, var(--color-tag), transparent 90%);
+		color: var(--color-tag);
+		padding: 0.25em 0.5em;
 		border-radius: 99rem;
-		padding: 0.25em 0.75em;
-		margin-left: 0.75rem;
+	}
+
+	.priority {
+		font-size: 0.5rem;
+		margin-left: 0.75em;
 
 		&.priority-3 {
 			color: color-mix(in srgb, var(--color-text), transparent 20%);
@@ -429,20 +439,18 @@ textarea {
 		}
 
 		&.priority-2 {
-			color: color-mix(in srgb, var(--color-primary), var(--color-text-03) 80%);
-			background-color: color-mix(
+			--color-tag: color-mix(
 				in srgb,
 				var(--color-primary),
-				transparent 95%
+				var(--color-background) 15%
 			);
 		}
 
 		&.priority-1 {
-			color: color-mix(in srgb, var(--color-text), transparent);
-			background-color: color-mix(
+			--color-tag: color-mix(
 				in srgb,
-				var(--color-text-03),
-				transparent 92%
+				var(--color-text),
+				var(--color-background)
 			);
 		}
 	}
@@ -458,17 +466,13 @@ textarea {
 	}
 
 	.right-container > div {
-		display: flex;
-		align-items: center;
-		gap: 0.2em;
-
 		&.date {
-			font-size: 0.875rem;
-			color: var(--color-text-02);
+			--color-tag: var(--color-text-02);
+			font-size: 0.75rem;
 		}
 
 		&.due {
-			color: var(--color-error);
+			--color-tag: var(--color-error);
 		}
 
 		.icon {
@@ -478,16 +482,6 @@ textarea {
 
 		.text {
 			width: max-content;
-		}
-
-		&.project,
-		&.overdue {
-			--color-tag: var(--color-secondary);
-			font-size: 0.75rem;
-			background-color: color-mix(in srgb, var(--color-tag), transparent 90%);
-			color: var(--color-tag);
-			padding: 0.25em 0.5em;
-			border-radius: 99rem;
 		}
 
 		&.overdue {
