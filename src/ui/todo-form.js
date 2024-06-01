@@ -1,5 +1,5 @@
 import { form, element } from "./base";
-import { createTodoElement } from "./todo-element";
+import { renderUpdatedList } from "./todo-content";
 
 let formTargetElement = null;
 export const getFormTargetElement = () => formTargetElement;
@@ -60,23 +60,15 @@ export function registerSubmitListener(action, callback) {
 		const formData = new FormData(event.target);
 		const todoFormData = Object.fromEntries(formData);
 		const selectedElement = getFormTargetElement();
-		const elementData = getElementData(selectedElement);
-		callback(todoFormData, elementData);
+		const elementID = getElementId(selectedElement);
+		callback(todoFormData, elementID, renderUpdatedList);
 		hideTodoForm();
 	};
 }
 
-function getElementData(element) {
+function getElementId(element) {
 	if (!element || element === element.addTodoButton) return null;
-	return {
-		id: element.dataset.id,
-		updateContent: updateTodoElement,
-	};
-}
-
-function updateTodoElement(todo, handler) {
-	const updatedTodoElement = createTodoElement(todo, handler);
-	formTargetElement.replaceChildren(...updatedTodoElement.children);
+	return element.dataset.id;
 }
 
 function handleEscapePress(event) {

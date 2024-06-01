@@ -2,7 +2,21 @@ import { createIcon, element, renderList } from "./base";
 import { createTodoElement } from "./todo-element";
 export * from "./todo-form";
 
-export const renderTodos = renderList(element.todoList, createTodoElement);
+export const renderContentList = renderList(
+	element.todoList,
+	createTodoElement,
+);
+
+let getUpdatedList = null;
+export let renderUpdatedList = null;
+
+export function renderTodos(listGetter, handler, options) {
+	getUpdatedList = listGetter;
+	renderUpdatedList = () => {
+		renderContentList(getUpdatedList(), handler, options);
+	};
+	renderUpdatedList();
+}
 
 export function addTodoElement(todo, handler) {
 	const todoElement = createTodoElement(todo, handler);

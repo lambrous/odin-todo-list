@@ -36,7 +36,7 @@ function switchProject(project) {
 		currentProject.id ? "tag" : "inbox",
 	);
 	todoContent.renderTodos(
-		TodoItem.getIncompleteTodosForProject(currentProject.id),
+		() => TodoItem.getIncompleteTodosForProject(currentProject.id),
 		todoItemHandler,
 	);
 	completedList.renderItems(
@@ -68,12 +68,12 @@ function onSubmitTodoAdd(formData) {
 	todoContent.addTodoElement(newTodo, todoItemHandler);
 }
 
-function onSubmitTodoEdit(formData, targetElement) {
-	const selectedTodo = TodoItem.getTodoByID(targetElement.id);
+function onSubmitTodoEdit(formData, elementID, renderUpdatedList) {
+	const selectedTodo = TodoItem.getTodoByID(elementID);
 	for (const key in formData) {
 		selectedTodo.updateProperty(key, formData[key]);
 	}
-	targetElement.updateContent(selectedTodo, todoItemHandler);
+	renderUpdatedList();
 }
 
 function completeTodo(showComplete = true) {
@@ -110,16 +110,16 @@ function onUncheck(todoID) {
 	selectedTodo.markIncomplete();
 	completedList.removeItem(todoID);
 	todoContent.renderTodos(
-		TodoItem.getIncompleteTodosForProject(currentProject.id),
+		() => TodoItem.getIncompleteTodosForProject(currentProject.id),
 		todoItemHandler,
 	);
 }
 
-function showOtherList(list, props, options) {
+function showOtherList(listGetter, props, options) {
 	currentProject = { id: props.id };
 	todoContent.updateProjectName(props.name, null, props.icon);
 	todoContent.renderTodos(
-		list,
+		listGetter,
 		{
 			onTodoComplete: completeTodo(false),
 			onTodoDelete,
@@ -143,7 +143,7 @@ element.inboxButton.addEventListener("click", () => {
 
 element.todayNavButton.addEventListener("click", () => {
 	showOtherList(
-		TodoItem.incompleteTodosToday.concat(TodoItem.overdueTodos),
+		() => TodoItem.incompleteTodosToday.concat(TodoItem.overdueTodos),
 		{ name: "Today", id: "today", icon: "today" },
 		{ showProject: true, showOverdue: true },
 	);
@@ -151,7 +151,7 @@ element.todayNavButton.addEventListener("click", () => {
 
 element.priorityNavButton.addEventListener("click", () => {
 	showOtherList(
-		TodoItem.incompleteHighPriorityTodos,
+		() => TodoItem.incompleteHighPriorityTodos,
 		{ name: "High Priority", id: "priority", icon: "flag" },
 		{ showProject: true, showPriority: false },
 	);
