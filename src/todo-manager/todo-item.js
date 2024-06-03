@@ -10,19 +10,25 @@ export default class TodoItem {
 	static #todos = new Map();
 
 	constructor(
-		{ title, description, dueDate, priority, id, isComplete, completedDate },
+		{
+			title = "New Todo",
+			description,
+			dueDate,
+			priority,
+			id,
+			isComplete = false,
+			completedDate = null,
+		},
 		project = null,
 	) {
-		this.title = title || "New Todo";
+		this.title = title;
 		this.description = description;
 		this.dueDate = dueDate;
 		this.priority = priority;
-		this.isComplete = isComplete ?? false;
+		this.isComplete = isComplete;
 		this.id = id ?? nanoid(8);
-		this.completedDate = completedDate ?? null;
-
-		if (project === null) this.project = { id: null };
-		else this.project = project;
+		this.completedDate = completedDate;
+		this.project = project ?? { id: null };
 
 		TodoItem.#todos.set(this.id, this);
 	}
@@ -66,9 +72,10 @@ export default class TodoItem {
 			priorityValue < TodoItem.MIN_PRIORITY ||
 			priorityValue > TodoItem.MAX_PRIORITY
 		) {
-			this.#priority = 0;
+			this.#priority = TodoItem.MIN_PRIORITY;
+		} else {
+			this.#priority = priorityValue;
 		}
-		this.#priority = priorityValue;
 	}
 
 	get dueDate() {
